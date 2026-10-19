@@ -10,19 +10,24 @@ import com.badlogic.gdx.math.Rectangle;
 
 
 public class Heroe {
-	   private Rectangle bucket;
-	   private Texture bucketImage;
+	   private Rectangle area;
+	   private Texture imagenHeroe;
 	   private Sound sonidoHerido;
 	   private int vidas = 3;
 	   private int puntos = 0;
-	   private int velx = 400;
+	   private int velocidadHorizontal = 400;
+	   private float velocidadVertical = 0;
+	   private static final float FUERZA_SALTO = 650f;
+	   private static final float GRAVEDAD = -1800f;
+	   private static final float ALTURA_SUELO = 20f;
+	   private boolean enSuelo = true;
 	   private boolean herido = false;
-	   private int tiempoHeridoMax=50;
+	   private static final int DURACION_HERIDO=50;
 	   private int tiempoHerido;
 	   
 	   
 	   public Heroe(Texture tex, Sound ss) {
-		   bucketImage = tex;
+		   imagenHeroe = tex;
 		   sonidoHerido = ss;
 	   }
 	   
@@ -34,57 +39,88 @@ public class Heroe {
 			return puntos;
 		}
 		public Rectangle getArea() {
-			return bucket;
+			return area;
 		}
 		public void sumarPuntos(int pp) {
 			puntos+=pp;
 		}
 		
 	
-	   public void crear() {
-		      bucket = new Rectangle();
-		      bucket.x = 800 / 2 - 64 / 2;
-		      bucket.y = 20;
-		      bucket.width = 64;
-		      bucket.height = 64;
-	   }
+		public void crear() {
+		    area = new Rectangle();
+		    area.x = 800 / 2 - 64 / 2;
+		    area.y = ALTURA_SUELO;
+		    area.width = 64;
+		    area.height = 64;
+
+		    velocidadVertical = 0;
+		    enSuelo = true;
+		}
+		
 	   public void danar() {
 		  vidas--;
 		  herido = true;
-		  tiempoHerido=tiempoHeridoMax;
+		  tiempoHerido=DURACION_HERIDO;
 		  sonidoHerido.play();
 	   }
 	   public void dibujar(SpriteBatch batch) {
 		 if (!herido)  
-		   batch.draw(bucketImage, bucket.x, bucket.y);
+		   batch.draw(imagenHeroe, area.x, area.y);
 		 else {
 		
-		   batch.draw(bucketImage, bucket.x, bucket.y+ MathUtils.random(-5,5));
+		   batch.draw(imagenHeroe, area.x, area.y+ MathUtils.random(-5,5));
 		   tiempoHerido--;
 		   if (tiempoHerido<=0) herido = false;
 		 }
 	   } 
 	   
 	   
-	   public void actualizarMovimiento() { 
-		   // movimiento desde mouse/touch
-		   /*if(Gdx.input.isTouched()) {
-			      Vector3 touchPos = new Vector3();
-			      touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-			      camera.unproject(touchPos);
-			      bucket.x = touchPos.x - 64 / 2;
-			}*/
-		   //movimiento desde teclado
-		   if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) bucket.x -= velx * Gdx.graphics.getDeltaTime();
-		   if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) bucket.x += velx * Gdx.graphics.getDeltaTime();
-		   // que no se salga de los bordes izq y der
-		   if(bucket.x < 0) bucket.x = 0;
-		   if(bucket.x > 800 - 64) bucket.x = 800 - 64;
-	   }
+	   public void actualizarMovimiento() {
+		    float delta = Gdx.graphics.getDeltaTime();
+
+		    // Movimiento horizontal
+		    if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+		        area.x -= velocidadHorizontal * delta;
+		    }
+
+		    if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+		        area.x += velocidadHorizontal * delta;
+		    }
+
+		    // Salto
+		    boolean solicitaSalto =
+		            Gdx.input.isKeyJustPressed(Input.Keys.SPACE)
+		            || Gdx.input.isKeyJustPressed(Input.Keys.UP);
+
+		    if (solicitaSalto && enSuelo) {
+		        velocidadVertical = FUERZA_SALTO;
+		        enSuelo = false;
+		    }
+
+		    // Gravedad y movimiento vertical
+		    velocidadVertical += GRAVEDAD * delta;
+		    area.y += velocidadVertical * delta;
+
+		    // Colisión con el suelo
+		    if (area.y <= ALTURA_SUELO) {
+		        area.y = ALTURA_SUELO;
+		        velocidadVertical = 0;
+		        enSuelo = true;
+		    }
+
+		    // Límites laterales
+		    if (area.x < 0) {
+		        area.x = 0;
+		    }
+
+		    if (area.x > 800 - area.width) {
+		        area.x = 800 - area.width;
+		    }
+		}
 	    
 
 	public void destruir() {
-		    bucketImage.dispose();
+		    imagenHeroe.dispose();
 	   }
 	
    public boolean estaHerido() {
