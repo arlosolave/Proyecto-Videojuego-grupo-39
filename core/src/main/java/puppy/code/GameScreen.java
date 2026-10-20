@@ -42,7 +42,13 @@ public class GameScreen implements Screen {
          Sound dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
         
 	     Music rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
-         lluvia = new Lluvia(gota, gotaMala, dropSound, rainMusic);
+	     lluvia = new Lluvia(
+	    	        gota,
+	    	        gotaMala,
+	    	        dropSound,
+	    	        rainMusic,
+	    	        new AtaqueVertical(300)
+	    	);
 	      
 	      // camera
 	      camera = new OrthographicCamera();

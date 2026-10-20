@@ -16,7 +16,7 @@ public class Lluvia {
 
     private Array<Proyectil> proyectiles;
     private long ultimoTiempoGota;
-
+    private EstrategiaAtaque estrategiaAtaque;
     private final Texture gotaBuena;
     private final Texture gotaMala;
     private final Sound sonidoGota;
@@ -26,14 +26,28 @@ public class Lluvia {
             Texture gotaBuena,
             Texture gotaMala,
             Sound sonidoGota,
-            Music musicaLluvia) {
+            Music musicaLluvia,
+            EstrategiaAtaque estrategiaAtaque) {
 
         this.gotaBuena = gotaBuena;
         this.gotaMala = gotaMala;
         this.sonidoGota = sonidoGota;
         this.musicaLluvia = musicaLluvia;
+        this.estrategiaAtaque = estrategiaAtaque;
     }
 
+    public void setEstrategiaAtaque(
+            EstrategiaAtaque estrategiaAtaque) {
+
+        if (estrategiaAtaque == null) {
+            throw new IllegalArgumentException(
+                    "La estrategia de ataque no puede ser null."
+            );
+        }
+
+        this.estrategiaAtaque = estrategiaAtaque;
+    }
+    
     public void crear() {
         proyectiles = new Array<>();
         crearGotaDeLluvia();
@@ -52,17 +66,12 @@ public class Lluvia {
         int puntos =
                 esDanina ? 0 : 10;
 
-        Proyectil gota = new Proyectil(
-                textura,
-                MathUtils.random(0, 800 - 64),
-                480,
-                64,
-                64,
-                0,
-                -300,
-                esDanina,
-                puntos
-        );
+        Proyectil gota =
+                estrategiaAtaque.crearProyectil(
+                        textura,
+                        esDanina,
+                        puntos
+                );
 
         proyectiles.add(gota);
         ultimoTiempoGota = TimeUtils.nanoTime();
