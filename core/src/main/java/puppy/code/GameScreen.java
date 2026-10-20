@@ -20,7 +20,7 @@ public class GameScreen implements Screen {
 	private Heroe heroe;
 	private Lluvia lluvia;
 	private ShapeRenderer shapeRenderer;
-	private Nivel nivelActual;
+	private Partida partida;
 
 	   
 	//boolean activo = true;
@@ -53,15 +53,15 @@ public class GameScreen implements Screen {
 	      camera.setToOrtho(false, 800, 480);
 	      
 	      shapeRenderer = new ShapeRenderer();
-
-	      nivelActual = new NivelPuente();
-	      nivelActual.iniciar(lluvia);
 	      
 	      // creacion del tarro
 	      heroe.crear();
 	      
 	      // creacion de la lluvia
 	      lluvia.crear();
+	      
+	      partida = new Partida();
+	      partida.iniciar(lluvia);
 	}
 
 	@Override
@@ -69,8 +69,19 @@ public class GameScreen implements Screen {
 	    // Limpiar la pantalla.
 	    ScreenUtils.clear(0, 0, 0.2f, 1);
 
+	    Nivel nivelActual = partida.getNivelActual();
+	    
 	    // Actualizar el estado del nivel.
 	    nivelActual.actualizarTiempo(delta);
+	    
+	    if (nivelActual.estaCompletado()
+	            && partida.avanzarNivel(
+	                    lluvia,
+	                    heroe
+	            )) {
+
+	        nivelActual = partida.getNivelActual();
+	    }
 
 	    // Actualizar matrices de la cámara.
 	    camera.update();

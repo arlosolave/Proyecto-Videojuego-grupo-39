@@ -43,7 +43,9 @@ public class Heroe {
 		public void sumarPuntos(int pp) {
 			puntos+=pp;
 		}
-		
+		public void ganarVida() {
+		    vidas++;
+		}
 	
 		public void crear() {
 		    area = new Rectangle();

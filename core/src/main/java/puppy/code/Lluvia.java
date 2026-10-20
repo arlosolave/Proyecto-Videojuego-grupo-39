@@ -151,6 +151,10 @@ public class Lluvia {
         }
     }
 
+    public void limpiarProyectiles() {
+        proyectiles.clear();
+    }
+    
     public void destruir() {
         gotaBuena.dispose();
         gotaMala.dispose();
