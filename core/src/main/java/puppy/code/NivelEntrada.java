@@ -2,7 +2,7 @@ package puppy.code;
 
 public class NivelEntrada extends Nivel {
 
-    private static final float DURACION = 30f;
+    private static final float DURACION = 5f;
     private static final float VELOCIDAD_ATAQUE = 350f;
 
     public NivelEntrada() {

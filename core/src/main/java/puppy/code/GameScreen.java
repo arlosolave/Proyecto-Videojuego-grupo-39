@@ -74,13 +74,33 @@ public class GameScreen implements Screen {
 	    // Actualizar el estado del nivel.
 	    nivelActual.actualizarTiempo(delta);
 	    
-	    if (nivelActual.estaCompletado()
-	            && partida.avanzarNivel(
+	    if (nivelActual.estaCompletado()) {
+
+	        if (partida.tieneSiguienteNivel()) {
+	            partida.avanzarNivel(
 	                    lluvia,
 	                    heroe
-	            )) {
+	            );
 
-	        nivelActual = partida.getNivelActual();
+	            nivelActual =
+	                    partida.getNivelActual();
+
+	        } else {
+	            if (game.getHigherScore()
+	                    < heroe.getPuntos()) {
+
+	                game.setHigherScore(
+	                        heroe.getPuntos()
+	                );
+	            }
+
+	            game.setScreen(
+	                    new VictoriaScreen(game)
+	            );
+
+	            dispose();
+	            return;
+	        }
 	    }
 
 	    // Actualizar matrices de la cámara.

@@ -13,6 +13,8 @@ public class Partida {
 
         niveles.add(new NivelPuente());
         niveles.add(new NivelEntrada());
+        niveles.add(new NivelRecepcion());
+        niveles.add(new NivelConde());
 
         indiceNivelActual = 0;
     }
