@@ -9,14 +9,20 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import java.util.ArrayList;
+import java.util.List;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public class GameScreen implements Screen {
 	final GameLluviaMenu game;
     private OrthographicCamera camera;
 	private SpriteBatch batch;	   
 	private BitmapFont font;
-	private Heroe tarro;
+	private Heroe heroe;
 	private Lluvia lluvia;
+	private ShapeRenderer shapeRenderer;
+	private List<Plataforma> plataformas;
 
 	   
 	//boolean activo = true;
@@ -27,7 +33,7 @@ public class GameScreen implements Screen {
         this.font = game.getFont();
 		  // load the images for the droplet and the bucket, 64x64 pixels each 	     
 		  Sound hurtSound = Gdx.audio.newSound(Gdx.files.internal("hurt.ogg"));
-		  tarro = new Heroe(new Texture(Gdx.files.internal("bucket.png")),hurtSound);
+		  heroe = new Heroe(new Texture(Gdx.files.internal("bucket.png")),hurtSound);
          
 	      // load the drop sound effect and the rain background "music" 
          Texture gota = new Texture(Gdx.files.internal("drop.png"));
@@ -41,9 +47,21 @@ public class GameScreen implements Screen {
 	      // camera
 	      camera = new OrthographicCamera();
 	      camera.setToOrtho(false, 800, 480);
-	      batch = new SpriteBatch();
+	      
+	      shapeRenderer = new ShapeRenderer();
+
+	      plataformas = new ArrayList<>();
+
+	      plataformas.add(
+	              new Plataforma(140, 100, 180, 20)
+	      );
+
+	      plataformas.add(
+	              new Plataforma(460, 200, 180, 20)
+	      );
+	      
 	      // creacion del tarro
-	      tarro.crear();
+	      heroe.crear();
 	      
 	      // creacion de la lluvia
 	      lluvia.crear();
@@ -55,29 +73,37 @@ public class GameScreen implements Screen {
 		ScreenUtils.clear(0, 0, 0.2f, 1);
 		//actualizar matrices de la cámara
 		camera.update();
+		shapeRenderer.setProjectionMatrix(camera.combined);
+		shapeRenderer.begin(ShapeType.Filled);
+
+		for (Plataforma plataforma : plataformas) {
+		    plataforma.dibujar(shapeRenderer);
+		}
+
+		shapeRenderer.end();
 		//actualizar 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		//dibujar textos
-		font.draw(batch, "Gotas totales: " + tarro.getPuntos(), 5, 475);
-		font.draw(batch, "Vidas : " + tarro.getVidas(), 670, 475);
+		font.draw(batch, "Gotas totales: " + heroe.getPuntos(), 5, 475);
+		font.draw(batch, "Vidas : " + heroe.getVidas(), 670, 475);
 		font.draw(batch, "HighScore : " + game.getHigherScore(), camera.viewportWidth/2-50, 475);
 		
-		if (!tarro.estaHerido()) {
+		if (!heroe.estaHerido()) {
 			// movimiento del tarro desde teclado
-	        tarro.actualizarMovimiento();        
+			heroe.actualizarMovimiento(plataformas);        
 			// caida de la lluvia 
-	       if (!lluvia.actualizarMovimiento(tarro)) {
+	       if (!lluvia.actualizarMovimiento(heroe)) {
 	    	  //actualizar HigherScore
-	    	  if (game.getHigherScore()<tarro.getPuntos())
-	    		  game.setHigherScore(tarro.getPuntos());  
+	    	  if (game.getHigherScore()<heroe.getPuntos())
+	    		  game.setHigherScore(heroe.getPuntos());  
 	    	  //ir a la ventana de finde juego y destruir la actual
 	    	  game.setScreen(new GameOverScreen(game));
 	    	  dispose();
 	       }
 		}
 		
-		tarro.dibujar(batch);
+		heroe.dibujar(batch);
 		lluvia.actualizarDibujoLluvia(batch);
 		
 		batch.end();
@@ -111,9 +137,9 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void dispose() {
-      tarro.destruir();
+      heroe.destruir();
       lluvia.destruir();
-
+      shapeRenderer.dispose();
 	}
 
 }
