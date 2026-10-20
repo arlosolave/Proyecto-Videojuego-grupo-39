@@ -9,8 +9,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
-import java.util.ArrayList;
-import java.util.List;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
@@ -22,7 +20,7 @@ public class GameScreen implements Screen {
 	private Heroe heroe;
 	private Lluvia lluvia;
 	private ShapeRenderer shapeRenderer;
-	private List<Plataforma> plataformas;
+	private Nivel nivelActual;
 
 	   
 	//boolean activo = true;
@@ -56,15 +54,8 @@ public class GameScreen implements Screen {
 	      
 	      shapeRenderer = new ShapeRenderer();
 
-	      plataformas = new ArrayList<>();
-
-	      plataformas.add(
-	              new Plataforma(140, 100, 180, 20)
-	      );
-
-	      plataformas.add(
-	              new Plataforma(460, 200, 180, 20)
-	      );
+	      nivelActual = new NivelPuente();
+	      nivelActual.iniciar(lluvia);
 	      
 	      // creacion del tarro
 	      heroe.crear();
@@ -75,44 +66,102 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		//limpia la pantalla con color azul obscuro.
-		ScreenUtils.clear(0, 0, 0.2f, 1);
-		//actualizar matrices de la c√°mara
-		camera.update();
-		shapeRenderer.setProjectionMatrix(camera.combined);
-		shapeRenderer.begin(ShapeType.Filled);
+	    // Limpiar la pantalla.
+	    ScreenUtils.clear(0, 0, 0.2f, 1);
 
-		for (Plataforma plataforma : plataformas) {
-		    plataforma.dibujar(shapeRenderer);
-		}
+	    // Actualizar el estado del nivel.
+	    nivelActual.actualizarTiempo(delta);
 
-		shapeRenderer.end();
-		//actualizar 
-		batch.setProjectionMatrix(camera.combined);
-		batch.begin();
-		//dibujar textos
-		font.draw(batch, "Gotas totales: " + heroe.getPuntos(), 5, 475);
-		font.draw(batch, "Vidas : " + heroe.getVidas(), 670, 475);
-		font.draw(batch, "HighScore : " + game.getHigherScore(), camera.viewportWidth/2-50, 475);
-		
-		if (!heroe.estaHerido()) {
-			// movimiento del tarro desde teclado
-			heroe.actualizarMovimiento(plataformas);        
-			// caida de la lluvia 
-	       if (!lluvia.actualizarMovimiento(heroe)) {
-	    	  //actualizar HigherScore
-	    	  if (game.getHigherScore()<heroe.getPuntos())
-	    		  game.setHigherScore(heroe.getPuntos());  
-	    	  //ir a la ventana de finde juego y destruir la actual
-	    	  game.setScreen(new GameOverScreen(game));
-	    	  dispose();
-	       }
-		}
-		
-		heroe.dibujar(batch);
-		lluvia.actualizarDibujoLluvia(batch);
-		
-		batch.end();
+	    // Actualizar matrices de la c·mara.
+	    camera.update();
+
+	    // Actualizar la lÛgica del juego.
+	    if (!heroe.estaHerido()) {
+	        heroe.actualizarMovimiento(
+	                nivelActual.getPlataformas()
+	        );
+
+	        if (!lluvia.actualizarMovimiento(heroe)) {
+	            if (game.getHigherScore()
+	                    < heroe.getPuntos()) {
+
+	                game.setHigherScore(
+	                        heroe.getPuntos()
+	                );
+	            }
+
+	            game.setScreen(
+	                    new GameOverScreen(game)
+	            );
+
+	            dispose();
+	            return;
+	        }
+	    }
+
+	    // Dibujar plataformas.
+	    shapeRenderer.setProjectionMatrix(
+	            camera.combined
+	    );
+
+	    shapeRenderer.begin(ShapeType.Filled);
+
+	    for (Plataforma plataforma
+	            : nivelActual.getPlataformas()) {
+
+	        plataforma.dibujar(shapeRenderer);
+	    }
+
+	    shapeRenderer.end();
+
+	    // Dibujar hÈroe, proyectiles e interfaz.
+	    batch.setProjectionMatrix(camera.combined);
+	    batch.begin();
+
+	    heroe.dibujar(batch);
+	    lluvia.actualizarDibujoLluvia(batch);
+
+	    // Primera fila del HUD.
+	    font.draw(
+	            batch,
+	            "Puntos: " + heroe.getPuntos(),
+	            10,
+	            470
+	    );
+
+	    font.draw(
+	            batch,
+	            "Record: " + game.getHigherScore(),
+	            320,
+	            470
+	    );
+
+	    font.draw(
+	            batch,
+	            "Vidas: " + heroe.getVidas(),
+	            680,
+	            470
+	    );
+
+	    // Segunda fila del HUD.
+	    font.draw(
+	            batch,
+	            "Nivel: " + nivelActual.getNombre(),
+	            10,
+	            435
+	    );
+
+	    font.draw(
+	            batch,
+	            "Tiempo: "
+	            + (int) Math.ceil(
+	                    nivelActual.getTiempoRestante()
+	            ),
+	            620,
+	            435
+	    );
+
+	    batch.end();
 	}
 
 	@Override
