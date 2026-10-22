@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 		private SpriteBatch batch;
 		private BitmapFont font;
-		private int higherScore;
+		private int recordAguaBendita;
 
 		@Override
 		public void create() {
@@ -46,12 +46,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 			return font;
 		}
 
-		public int getHigherScore() {
-			return higherScore;
+		public int getRecordAguaBendita() {
+			return recordAguaBendita;
 		}
 
-		public void setHigherScore(int higherScore) {
-			this.higherScore = higherScore;
+		public void setRecordAguaBendita(int higherScore) {
+			this.recordAguaBendita = higherScore;
 		}
 		
 

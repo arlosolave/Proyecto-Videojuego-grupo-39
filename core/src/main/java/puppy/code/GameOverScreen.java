@@ -1,77 +1,105 @@
 package puppy.code;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
 public class GameOverScreen implements Screen {
-	private final GameLluviaMenu game;
-	private SpriteBatch batch;	   
-	private BitmapFont font;
-	private OrthographicCamera camera;
 
-	public GameOverScreen(final GameLluviaMenu game) {
-		this.game = game;
+    private final GameLluviaMenu game;
+    private final SpriteBatch batch;
+    private final BitmapFont font;
+    private final OrthographicCamera camera;
+    private final GlyphLayout layout =
+            new GlyphLayout();
+    
+    public GameOverScreen(
+            final GameLluviaMenu game) {
+
+        this.game = game;
         this.batch = game.getBatch();
         this.font = game.getFont();
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 800, 480);
-	}
 
-	@Override
-	public void render(float delta) {
-		ScreenUtils.clear(0, 0, 0.2f, 1);
-		camera.update();
-		batch.setProjectionMatrix(camera.combined);
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, 800, 480);
+    }
 
-		batch.begin();
-		font.draw(batch, "GAME OVER ", 100, 200);
-		font.draw(batch, "Toca en cualquier lado para reiniciar.", 100, 100);
-		batch.end();
+    private void dibujarTextoCentrado(
+            String texto,
+            float posicionY,
+            float escala) {
 
-		if (Gdx.input.isTouched()) {
-			game.setScreen(new GameScreen(game));
-			dispose();
-		}
-	}
+        font.getData().setScale(escala);
+        layout.setText(font, texto);
 
-	@Override
-	public void show() {
-		// TODO Auto-generated method stub
-		
-	}
+        float posicionX =
+                (camera.viewportWidth
+                - layout.width) / 2f;
 
-	@Override
-	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-		
-	}
+        font.draw(
+                batch,
+                layout,
+                posicionX,
+                posicionY
+        );
+    }
+    
+    @Override
+    public void render(float delta) {
+        ScreenUtils.clear(0.12f, 0.01f, 0.01f, 1);
 
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-		
-	}
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
 
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-		
-	}
+        batch.begin();
 
-	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
-		
-	}
+        dibujarTextoCentrado(
+                "GAME OVER",
+                370,
+                2.3f
+        );
 
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-		
-	}
+        dibujarTextoCentrado(
+                "El heroe ha caido durante su viaje.",
+                265,
+                1.35f
+        );
 
+        dibujarTextoCentrado(
+                "Record de agua bendita: "
+                + game.getRecordAguaBendita(),
+                205,
+                1.3f
+        );
+
+        dibujarTextoCentrado(
+                "ENTER o clic para intentarlo nuevamente",
+                105,
+                1.2f
+        );
+
+        batch.end();
+
+        font.getData().setScale(1f);
+
+        if (Gdx.input.isTouched()
+                || Gdx.input.isKeyJustPressed(
+                        Input.Keys.ENTER)) {
+
+            game.setScreen(new GameScreen(game));
+            dispose();
+        }
+    }
+
+    @Override public void show() {}
+    @Override public void resize(int width, int height) {}
+    @Override public void pause() {}
+    @Override public void resume() {}
+    @Override public void hide() {}
+    @Override public void dispose() {}
 }

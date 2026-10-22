@@ -1,82 +1,104 @@
 package puppy.code;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
-
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
 public class MainMenuScreen implements Screen {
 
-	final GameLluviaMenu game;
-	private SpriteBatch batch;
-	private BitmapFont font;
-	private OrthographicCamera camera;
+    private final GameLluviaMenu game;
+    private final SpriteBatch batch;
+    private final BitmapFont font;
+    private final OrthographicCamera camera;
+    private final GlyphLayout layout =
+            new GlyphLayout();
+    
+    public MainMenuScreen(
+            final GameLluviaMenu game) {
 
-	public MainMenuScreen(final GameLluviaMenu game) {
-		this.game = game;
+        this.game = game;
         this.batch = game.getBatch();
         this.font = game.getFont();
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 800, 480);
-	}
 
-	@Override
-	public void render(float delta) {
-		ScreenUtils.clear(0, 0, 0.2f, 1);
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, 800, 480);
+    }
 
-		camera.update();
-		batch.setProjectionMatrix(camera.combined);
+    private void dibujarTextoCentrado(
+            String texto,
+            float posicionY,
+            float escala) {
 
-		batch.begin();
-		font.getData().setScale(2, 2);
-		font.draw(batch, "Bienvenido a Recolecta Gotas!!! ", 100, camera.viewportHeight/2+50);
-		font.draw(batch, "Toca en cualquier lugar para comenzar!", 100, camera.viewportHeight/2-50);
+        font.getData().setScale(escala);
+        layout.setText(font, texto);
 
-		batch.end();
+        float posicionX =
+                (camera.viewportWidth
+                - layout.width) / 2f;
 
-		if (Gdx.input.isTouched()) {
-			game.setScreen(new GameScreen(game));
-			dispose();
-		}
-	}
+        font.draw(
+                batch,
+                layout,
+                posicionX,
+                posicionY
+        );
+    }
+    
+    @Override
+    public void render(float delta) {
+        ScreenUtils.clear(0.08f, 0.02f, 0.02f, 1);
 
-	@Override
-	public void show() {
-		// TODO Auto-generated method stub
-		
-	}
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
 
-	@Override
-	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-		
-	}
+        batch.begin();
 
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-		
-	}
+        dibujarTextoCentrado(
+                "EL CASTILLO DEL CONDE",
+                390,
+                2.2f
+        );
 
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-		
-	}
+        dibujarTextoCentrado(
+                "Un heroe viaja hacia el castillo",
+                290,
+                1.35f
+        );
 
-	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
-		
-	}
+        dibujarTextoCentrado(
+                "de un conde acusado de terribles crimenes.",
+                240,
+                1.25f
+        );
 
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-		
-	}
+        dibujarTextoCentrado(
+                "ENTER o clic para comenzar",
+                125,
+                1.3f
+        );
 
+        batch.end();
+
+        font.getData().setScale(1f);
+
+        if (Gdx.input.isTouched()
+                || Gdx.input.isKeyJustPressed(
+                        Input.Keys.ENTER)) {
+
+            game.setScreen(new GameScreen(game));
+            dispose();
+        }
+    }
+
+    @Override public void show() {}
+    @Override public void resize(int width, int height) {}
+    @Override public void pause() {}
+    @Override public void resume() {}
+    @Override public void hide() {}
+    @Override public void dispose() {}
 }

@@ -63,7 +63,7 @@ public class GameScreen implements Screen {
 
 	    // Crear el héroe y el gestor.
 	    heroe.crear();
-	    gestorProyectiles.crear();
+	    gestorProyectiles.iniciar();
 
 	    // Iniciar la partida.
 	    partida = new Partida();
@@ -91,12 +91,23 @@ public class GameScreen implements Screen {
 	            nivelActual =
 	                    partida.getNivelActual();
 
-	        } else {
-	            if (game.getHigherScore()
-	                    < heroe.getPuntos()) {
+	            gestorProyectiles.pausar();
 
-	                game.setHigherScore(
-	                        heroe.getPuntos()
+	            game.setScreen(
+	                    new TransicionNivelScreen(
+	                            game,
+	                            this,
+	                            nivelActual.getNombre()
+	                    )
+	            );
+	            return;
+	        } 
+	        else {
+	            if (game.getRecordAguaBendita()
+	                    < heroe.getAguaBenditaRecolectada()) {
+
+	                game.setRecordAguaBendita(
+	                        heroe.getAguaBenditaRecolectada()
 	                );
 	            }
 
@@ -118,11 +129,11 @@ public class GameScreen implements Screen {
 	    );
 
 	        if (!gestorProyectiles.actualizarMovimiento(heroe)) {
-	            if (game.getHigherScore()
-	                    < heroe.getPuntos()) {
+	            if (game.getRecordAguaBendita()
+	                    < heroe.getAguaBenditaRecolectada()) {
 
-	                game.setHigherScore(
-	                        heroe.getPuntos()
+	                game.setRecordAguaBendita(
+	                        heroe.getAguaBenditaRecolectada()
 	                );
 	            }
 
@@ -154,19 +165,21 @@ public class GameScreen implements Screen {
 	    batch.begin();
 
 	    heroe.dibujar(batch);
-	    gestorProyectiles.actualizarDibujoLluvia(batch);
+	    gestorProyectiles.dibujar(batch);
 
+	    font.getData().setScale(1f);
+	    
 	    // Primera fila del HUD.
 	    font.draw(
 	            batch,
-	            "Agua bendita: " + heroe.getPuntos(),
+	            "Agua bendita: " + heroe.getAguaBenditaRecolectada(),
 	            10,
 	            470
 	    );
 
 	    font.draw(
 	            batch,
-	            "Record: " + game.getHigherScore(),
+	            "Record: " + game.getRecordAguaBendita(),
 	            320,
 	            470
 	    );

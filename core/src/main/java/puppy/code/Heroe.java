@@ -14,7 +14,7 @@ public class Heroe {
 	   private Texture imagenHeroe;
 	   private Sound sonidoHerido;
 	   private int vidas = 3;
-	   private int puntos = 0;
+	   private int aguaBenditaRecolectada = 0;
 	   private int velocidadHorizontal = 400;
 	   private float velocidadVertical = 0;
 	   private static final float FUERZA_SALTO = 650f;
@@ -34,14 +34,14 @@ public class Heroe {
 			return vidas;
 		}
 	
-		public int getPuntos() {
-			return puntos;
+		public int getAguaBenditaRecolectada() {
+			return aguaBenditaRecolectada;
 		}
 		public Rectangle getArea() {
 			return area;
 		}
-		public void sumarPuntos(int pp) {
-			puntos+=pp;
+		public void recolectarAguaBendita(int pp) {
+			aguaBenditaRecolectada+=pp;
 		}
 		public void ganarVida() {
 		    vidas++;

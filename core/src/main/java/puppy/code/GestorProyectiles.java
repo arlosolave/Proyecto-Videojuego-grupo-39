@@ -55,7 +55,7 @@ public class GestorProyectiles {
                 estrategiaAtaque;
     }
 
-    public void crear() {
+    public void iniciar() {
         proyectiles = new Array<>();
 
         ultimoAtaque = TimeUtils.nanoTime();
@@ -193,7 +193,7 @@ public class GestorProyectiles {
                     }
 
                 } else {
-                    heroe.sumarPuntos(
+                    heroe.recolectarAguaBendita(
                             proyectil.getPuntos()
                     );
 
@@ -206,7 +206,7 @@ public class GestorProyectiles {
         return true;
     }
 
-    public void actualizarDibujoLluvia(
+    public void dibujar(
             SpriteBatch batch) {
 
         for (Proyectil proyectil
