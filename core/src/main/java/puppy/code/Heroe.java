@@ -58,12 +58,17 @@ public class Heroe {
 		    enSuelo = true;
 		}
 		
-	   public void danar() {
-		  vidas--;
-		  herido = true;
-		  tiempoHerido=DURACION_HERIDO;
-		  sonidoHerido.play();
-	   }
+		public void danar() {
+		    if (herido) {
+		        return;
+		    }
+
+		    vidas--;
+		    herido = true;
+		    tiempoHerido = DURACION_HERIDO;
+		    sonidoHerido.play();
+		}
+		
 	   public void dibujar(SpriteBatch batch) {
 		 if (!herido)  
 		   batch.draw(imagenHeroe, area.x, area.y);
@@ -157,9 +162,6 @@ public class Heroe {
 		}
 	    
 
-	public void destruir() {
-		    imagenHeroe.dispose();
-	   }
 	
    public boolean estaHerido() {
 	   return herido;

@@ -7,22 +7,28 @@ import java.util.List;
 public abstract class Nivel {
 
     private final String nombre;
-    private final float duracion;
+
+    private final ConfiguracionNivel configuracion;
+
     private float tiempoRestante;
+
     private final List<Plataforma> plataformas;
 
-    public Nivel(String nombre, float duracion) {
+    public Nivel(
+            String nombre,
+            ConfiguracionNivel configuracion) {
+
         this.nombre = nombre;
-        this.duracion = duracion;
+        this.configuracion = configuracion;
         this.plataformas = new ArrayList<>();
     }
 
-    /*
-     * Template Method:
-     * establece los pasos comunes para iniciar cualquier nivel.
-     */
-    public final void iniciar(Lluvia lluvia) {
-        tiempoRestante = duracion;
+    public final void iniciar(
+            GestorProyectiles gestorProyectiles) {
+
+        tiempoRestante =
+                configuracion.getDuracion();
+
         plataformas.clear();
 
         configurarPlataformas();
@@ -30,21 +36,28 @@ public abstract class Nivel {
         EstrategiaAtaque estrategia =
                 crearEstrategiaAtaque();
 
-        lluvia.setEstrategiaAtaque(estrategia);
+        gestorProyectiles.setEstrategiaAtaque(
+                estrategia
+        );
+
+        gestorProyectiles.configurarIntervalos(
+                configuracion
+                        .getIntervaloAtaques(),
+
+                configuracion
+                        .getIntervaloAguaBendita()
+        );
 
         alIniciar();
     }
 
     protected void configurarPlataformas() {
-    	// Por defecto, el nivel no tiene plataformas adicionales.
-    };
+        // Por defecto, no hay plataformas adicionales.
+    }
 
-    protected abstract EstrategiaAtaque crearEstrategiaAtaque();
+    protected abstract EstrategiaAtaque
+            crearEstrategiaAtaque();
 
-    /*
-     * Hook opcional. Las subclases pueden sobrescribirlo
-     * si necesitan hacer algo adicional al comenzar.
-     */
     protected void alIniciar() {
     }
 
@@ -77,6 +90,8 @@ public abstract class Nivel {
     }
 
     public final List<Plataforma> getPlataformas() {
-        return Collections.unmodifiableList(plataformas);
+        return Collections.unmodifiableList(
+                plataformas
+        );
     }
 }

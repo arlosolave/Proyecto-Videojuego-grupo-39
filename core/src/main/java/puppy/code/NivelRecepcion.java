@@ -2,14 +2,17 @@ package puppy.code;
 
 public class NivelRecepcion extends Nivel {
 
-    private static final float DURACION = 5f;
     private static final float VELOCIDAD_VERTICAL = 350f;
     private static final float VELOCIDAD_HORIZONTAL = 400f;
 
     public NivelRecepcion() {
         super(
                 "Recepcion del castillo",
-                DURACION
+                new ConfiguracionNivel.Builder()
+                        .conDuracion(35f)
+                        .conIntervaloAtaques(0.65f)
+                        .conIntervaloAguaBendita(6f)
+                        .build()
         );
     }
 

@@ -2,11 +2,17 @@ package puppy.code;
 
 public class NivelEntrada extends Nivel {
 
-    private static final float DURACION = 5f;
     private static final float VELOCIDAD_ATAQUE = 350f;
 
     public NivelEntrada() {
-        super("Entrada del castillo", DURACION);
+        super(
+                "Entrada del castillo",
+                new ConfiguracionNivel.Builder()
+                        .conDuracion(30f)
+                        .conIntervaloAtaques(0.75f)
+                        .conIntervaloAguaBendita(6.5f)
+                        .build()
+        );
     }
 
     @Override

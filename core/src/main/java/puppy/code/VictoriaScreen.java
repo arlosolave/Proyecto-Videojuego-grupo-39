@@ -60,8 +60,8 @@ public class VictoriaScreen implements Screen {
 
         font.draw(
                 batch,
-                "Puntuacion final: "
-                + game.getHigherScore(),
+                "Agua bendita reunida: "
+                		+ game.getHigherScore(),
                 245,
                 170
         );

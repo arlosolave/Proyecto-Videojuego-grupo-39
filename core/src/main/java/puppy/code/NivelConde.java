@@ -2,12 +2,14 @@ package puppy.code;
 
 public class NivelConde extends Nivel {
 
-    private static final float DURACION = 5f;
-
     public NivelConde() {
         super(
                 "Habitacion del conde",
-                DURACION
+                new ConfiguracionNivel.Builder()
+                        .conDuracion(45f)
+                        .conIntervaloAtaques(0.55f)
+                        .conIntervaloAguaBendita(7f)
+                        .build()
         );
     }
 

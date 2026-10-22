@@ -1,11 +1,10 @@
 package puppy.code;
 
-import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
+
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
+
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -18,50 +17,57 @@ public class GameScreen implements Screen {
 	private SpriteBatch batch;	   
 	private BitmapFont font;
 	private Heroe heroe;
-	private Lluvia lluvia;
+	private GestorProyectiles gestorProyectiles;
 	private ShapeRenderer shapeRenderer;
 	private Partida partida;
 
 	   
 	//boolean activo = true;
 
-	public GameScreen(final GameLluviaMenu game) {
-		this.game = game;
-        this.batch = game.getBatch();
-        this.font = game.getFont();
-		  // load the images for the droplet and the bucket, 64x64 pixels each 	     
-		  Sound hurtSound = Gdx.audio.newSound(Gdx.files.internal("hurt.ogg"));
-		  heroe = new Heroe(new Texture(Gdx.files.internal("bucket.png")),hurtSound);
-         
-	      // load the drop sound effect and the rain background "music" 
-         Texture gota = new Texture(Gdx.files.internal("drop.png"));
-         Texture gotaMala = new Texture(Gdx.files.internal("dropBad.png"));
-         
-         Sound dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
-        
-	     Music rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
-	     lluvia = new Lluvia(
-	    	        gota,
-	    	        gotaMala,
-	    	        dropSound,
-	    	        rainMusic,
-	    	        new AtaqueVertical(300)
-	    	);
-	      
-	      // camera
-	      camera = new OrthographicCamera();
-	      camera.setToOrtho(false, 800, 480);
-	      
-	      shapeRenderer = new ShapeRenderer();
-	      
-	      // creacion del tarro
-	      heroe.crear();
-	      
-	      // creacion de la lluvia
-	      lluvia.crear();
-	      
-	      partida = new Partida();
-	      partida.iniciar(lluvia);
+	public GameScreen(
+	        final GameLluviaMenu game) {
+
+	    this.game = game;
+	    this.batch = game.getBatch();
+	    this.font = game.getFont();
+
+	    GestorRecursos recursos =
+	            GestorRecursos.getInstancia();
+
+	    heroe = new Heroe(
+	            recursos.getTexturaHeroe(),
+	            recursos.getSonidoHerido()
+	    );
+
+	    gestorProyectiles =
+	            new GestorProyectiles(
+	                    recursos
+	                            .getTexturaAguaBendita(),
+
+	                    recursos
+	                            .getTexturaAtaque(),
+
+	                    recursos
+	                            .getSonidoRecoleccion(),
+
+	                    recursos.getMusica(),
+
+	                    new AtaqueVertical(300f)
+	            );
+
+	    // Cámara.
+	    camera = new OrthographicCamera();
+	    camera.setToOrtho(false, 800, 480);
+
+	    shapeRenderer = new ShapeRenderer();
+
+	    // Crear el héroe y el gestor.
+	    heroe.crear();
+	    gestorProyectiles.crear();
+
+	    // Iniciar la partida.
+	    partida = new Partida();
+	    partida.iniciar(gestorProyectiles);
 	}
 
 	@Override
@@ -78,7 +84,7 @@ public class GameScreen implements Screen {
 
 	        if (partida.tieneSiguienteNivel()) {
 	            partida.avanzarNivel(
-	                    lluvia,
+	                    gestorProyectiles,
 	                    heroe
 	            );
 
@@ -107,12 +113,11 @@ public class GameScreen implements Screen {
 	    camera.update();
 
 	    // Actualizar la lógica del juego.
-	    if (!heroe.estaHerido()) {
-	        heroe.actualizarMovimiento(
-	                nivelActual.getPlataformas()
-	        );
+	    heroe.actualizarMovimiento(
+	             nivelActual.getPlataformas()
+	    );
 
-	        if (!lluvia.actualizarMovimiento(heroe)) {
+	        if (!gestorProyectiles.actualizarMovimiento(heroe)) {
 	            if (game.getHigherScore()
 	                    < heroe.getPuntos()) {
 
@@ -128,7 +133,6 @@ public class GameScreen implements Screen {
 	            dispose();
 	            return;
 	        }
-	    }
 
 	    // Dibujar plataformas.
 	    shapeRenderer.setProjectionMatrix(
@@ -150,12 +154,12 @@ public class GameScreen implements Screen {
 	    batch.begin();
 
 	    heroe.dibujar(batch);
-	    lluvia.actualizarDibujoLluvia(batch);
+	    gestorProyectiles.actualizarDibujoLluvia(batch);
 
 	    // Primera fila del HUD.
 	    font.draw(
 	            batch,
-	            "Puntos: " + heroe.getPuntos(),
+	            "Agua bendita: " + heroe.getPuntos(),
 	            10,
 	            470
 	    );
@@ -202,7 +206,7 @@ public class GameScreen implements Screen {
 	@Override
 	public void show() {
 	  // continuar con sonido de lluvia
-	  lluvia.continuar();
+	  gestorProyectiles.continuar();
 	}
 
 	@Override
@@ -212,7 +216,7 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void pause() {
-		lluvia.pausar();
+		gestorProyectiles.pausar();
 		game.setScreen(new PausaScreen(game, this)); 
 	}
 
@@ -223,9 +227,8 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void dispose() {
-      heroe.destruir();
-      lluvia.destruir();
-      shapeRenderer.dispose();
+	    gestorProyectiles.pausar();
+	    shapeRenderer.dispose();
 	}
 
 }

@@ -19,15 +19,15 @@ public class Partida {
         indiceNivelActual = 0;
     }
 
-    public void iniciar(Lluvia lluvia) {
+    public void iniciar(GestorProyectiles gestorProyectiles) {
         indiceNivelActual = 0;
 
-        lluvia.limpiarProyectiles();
-        getNivelActual().iniciar(lluvia);
+        gestorProyectiles.limpiarProyectiles();
+        getNivelActual().iniciar(gestorProyectiles);
     }
 
     public boolean avanzarNivel(
-            Lluvia lluvia,
+            GestorProyectiles lluvia,
             Heroe heroe) {
 
         if (!getNivelActual().estaCompletado()
