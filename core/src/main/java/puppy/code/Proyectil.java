@@ -6,8 +6,8 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class Proyectil {
 
-    private static final float MARGEN_HORIZONTAL = 12f;
-    private static final float MARGEN_VERTICAL = 8f;
+	private static final float MARGEN_HORIZONTAL = 0.15f;
+	private static final float MARGEN_VERTICAL = 0.12f;
 
     private final Rectangle areaVisual;
     private final Rectangle hitbox;
@@ -35,11 +35,32 @@ public class Proyectil {
         this.danino = danino;
         this.puntos = puntos;
 
+        float escala = Math.min(
+                ancho / textura.getWidth(),
+                alto / textura.getHeight()
+        );
+
+        float anchoAjustado =
+                textura.getWidth() * escala;
+
+        float altoAjustado =
+                textura.getHeight() * escala;
+
+        /*
+         * Se centra la textura dentro del espacio
+         * máximo recibido por el constructor.
+         */
+        float xAjustada =
+                x + (ancho - anchoAjustado) / 2f;
+
+        float yAjustada =
+                y + (alto - altoAjustado) / 2f;
+
         areaVisual = new Rectangle(
-                x,
-                y,
-                ancho,
-                alto
+                xAjustada,
+                yAjustada,
+                anchoAjustado,
+                altoAjustado
         );
 
         hitbox = new Rectangle();
@@ -48,13 +69,19 @@ public class Proyectil {
     }
 
     private void actualizarHitbox() {
-        hitbox.set(
-                areaVisual.x + MARGEN_HORIZONTAL,
-                areaVisual.y + MARGEN_VERTICAL,
+        float margenX =
                 areaVisual.width
-                        - 2 * MARGEN_HORIZONTAL,
+                * MARGEN_HORIZONTAL;
+
+        float margenY =
                 areaVisual.height
-                        - 2 * MARGEN_VERTICAL
+                * MARGEN_VERTICAL;
+
+        hitbox.set(
+                areaVisual.x + margenX,
+                areaVisual.y + margenY,
+                areaVisual.width - 2 * margenX,
+                areaVisual.height - 2 * margenY
         );
     }
 

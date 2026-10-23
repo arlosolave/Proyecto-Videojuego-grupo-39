@@ -19,6 +19,11 @@ public class Heroe {
 	   private float velocidadVertical = 0;
 	   private static final float FUERZA_SALTO = 650f;
 	   private static final float GRAVEDAD = -1800f;
+	   private static final float ANCHO_VISUAL = 80f;
+	   private static final float ALTO_VISUAL = 80f;
+	   private static final float ANCHO_HITBOX = 42f;
+	   private static final float ALTO_HITBOX = 67f;
+	   private static final float AJUSTE_VISUAL_Y = -5f;
 	   private float alturaSuelo;
 	   private boolean enSuelo = true;
 	   private boolean herido = false;
@@ -49,11 +54,14 @@ public class Heroe {
 	
 		public void crear(float alturaSuelo) {
 		    area = new Rectangle();
-		    area.x = 800 / 2 - 64 / 2;
-		    area.y = alturaSuelo;;
+
+		    area.width = ANCHO_HITBOX;
+		    area.height = ALTO_HITBOX;
+
+		    area.x = 800 / 2f - area.width / 2f;
+		    area.y = alturaSuelo;
+
 		    this.alturaSuelo = alturaSuelo;
-		    area.width = 64;
-		    area.height = 64;
 
 		    velocidadVertical = 0;
 		    enSuelo = true;
@@ -70,16 +78,35 @@ public class Heroe {
 		    sonidoHerido.play();
 		}
 		
-	   public void dibujar(SpriteBatch batch) {
-		 if (!herido)  
-		   batch.draw(imagenHeroe, area.x, area.y);
-		 else {
-		
-		   batch.draw(imagenHeroe, area.x, area.y+ MathUtils.random(-5,5));
-		   tiempoHerido--;
-		   if (tiempoHerido<=0) herido = false;
-		 }
-	   } 
+		public void dibujar(SpriteBatch batch) {
+		   
+		    float posicionVisualX =
+		            area.x
+		            - (ANCHO_VISUAL - area.width) / 2f;
+
+		    float desplazamientoHerido = 0f;
+
+		    if (herido) {
+		        desplazamientoHerido =
+		                MathUtils.random(-5f, 5f);
+
+		        tiempoHerido--;
+
+		        if (tiempoHerido <= 0) {
+		            herido = false;
+		        }
+		    }
+
+		    batch.draw(
+		            imagenHeroe,
+		            posicionVisualX,
+		            area.y
+		            + AJUSTE_VISUAL_Y
+		            + desplazamientoHerido,
+		            ANCHO_VISUAL,
+		            ALTO_VISUAL
+		    );
+		}
 	   
 	   
 	   public void actualizarMovimiento(
@@ -152,13 +179,18 @@ public class Heroe {
 		        }
 		    }
 
-		    // Límites laterales
-		    if (area.x < 0) {
-		        area.x = 0;
+		    float margenVisual =
+		            (ANCHO_VISUAL - area.width) / 2f;
+
+		    if (area.x < margenVisual) {
+		        area.x = margenVisual;
 		    }
 
-		    if (area.x > 800 - area.width) {
-		        area.x = 800 - area.width;
+		    if (area.x
+		            > 800 - area.width - margenVisual) {
+
+		        area.x =
+		                800 - area.width - margenVisual;
 		    }
 		}
 	   public void colocarEnSuelo(

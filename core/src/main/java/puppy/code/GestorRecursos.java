@@ -12,7 +12,10 @@ public final class GestorRecursos {
 
     private Texture texturaHeroe;
     private Texture texturaAguaBendita;
-    private Texture texturaAtaque;
+    private Texture texturaSangre;
+    private Texture texturaFlecha;
+    private Texture texturaLava;
+    private Texture texturaGotaConde;
     private Texture fondoPuente;
     private Texture fondoEntrada;
     private Texture fondoRecepcion;
@@ -56,15 +59,27 @@ public final class GestorRecursos {
         );
         
         texturaHeroe = new Texture(
-                Gdx.files.internal("bucket.png")
+                Gdx.files.internal("heroe.png")
         );
 
         texturaAguaBendita = new Texture(
-                Gdx.files.internal("drop.png")
+                Gdx.files.internal("agua_bendita.png")
         );
 
-        texturaAtaque = new Texture(
-                Gdx.files.internal("dropBad.png")
+        texturaSangre = new Texture(
+                Gdx.files.internal("gota_sangre.png")
+        );
+
+        texturaFlecha = new Texture(
+                Gdx.files.internal("flecha.png")
+        );
+
+        texturaLava = new Texture(
+                Gdx.files.internal("lava.png")
+        );
+
+        texturaGotaConde = new Texture(
+                Gdx.files.internal("gota_conde.png")
         );
 
         sonidoHerido = Gdx.audio.newSound(
@@ -125,9 +140,29 @@ public final class GestorRecursos {
         return texturaAguaBendita;
     }
 
-    public Texture getTexturaAtaque() {
+    public Texture getTexturaAtaque(
+            TipoEscenario tipoEscenario) {
+
         verificarCarga();
-        return texturaAtaque;
+
+        switch (tipoEscenario) {
+            case PUENTE:
+                return texturaSangre;
+
+            case ENTRADA:
+                return texturaFlecha;
+
+            case RECEPCION:
+                return texturaLava;
+
+            case CONDE:
+                return texturaGotaConde;
+
+            default:
+                throw new IllegalArgumentException(
+                        "Escenario desconocido."
+                );
+        }
     }
 
     public Sound getSonidoHerido() {
@@ -152,7 +187,10 @@ public final class GestorRecursos {
 
         texturaHeroe.dispose();
         texturaAguaBendita.dispose();
-        texturaAtaque.dispose();
+        texturaSangre.dispose();
+        texturaFlecha.dispose();
+        texturaLava.dispose();
+        texturaGotaConde.dispose();
 
         fondoPuente.dispose();
         fondoEntrada.dispose();

@@ -20,7 +20,7 @@ public class GestorProyectiles {
     private long ultimaAguaBendita;
 
     private final Texture texturaAguaBendita;
-    private final Texture texturaAtaque;
+    private Texture texturaAtaque;
 
     private final Sound sonidoRecoleccion;
     private final Music musica;
@@ -107,7 +107,19 @@ public class GestorProyectiles {
 
         ultimoAtaque = TimeUtils.nanoTime();
     }
+    
+    public void configurarTexturaAtaque(
+            Texture texturaAtaque) {
 
+        if (texturaAtaque == null) {
+            throw new IllegalArgumentException(
+                    "La textura de ataque no puede ser nula."
+            );
+        }
+
+        this.texturaAtaque = texturaAtaque;
+    }
+    
     private void crearAguaBendita() {
         float posicionX =
                 MathUtils.random(0, 800 - 64);

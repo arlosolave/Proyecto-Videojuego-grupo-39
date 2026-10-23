@@ -9,7 +9,7 @@ public class NivelEntrada extends Nivel {
                 "Entrada del castillo",
                 new ConfiguracionNivel.Builder()
                         .conDuracion(30f)
-                        .conIntervaloAtaques(0.75f)
+                        .conIntervaloAtaques(0.65f)
                         .conIntervaloAguaBendita(6.5f)
                         .conEscenario(TipoEscenario.ENTRADA)
                         .conAlturaSuelo(80f)

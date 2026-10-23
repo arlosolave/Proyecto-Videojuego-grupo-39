@@ -43,8 +43,9 @@ public class GameScreen implements Screen {
 	                    recursos
 	                            .getTexturaAguaBendita(),
 
-	                    recursos
-	                            .getTexturaAtaque(),
+	                    recursos.getTexturaAtaque(
+	                                    TipoEscenario.PUENTE
+	                            ),
 
 	                    recursos
 	                            .getSonidoRecoleccion(),

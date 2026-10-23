@@ -40,6 +40,13 @@ public abstract class Nivel {
                 estrategia
         );
 
+        gestorProyectiles.configurarTexturaAtaque(
+                GestorRecursos.getInstancia()
+                        .getTexturaAtaque(
+                                getTipoEscenario()
+                        )
+        );
+        
         gestorProyectiles.configurarIntervalos(
                 configuracion
                         .getIntervaloAtaques(),
