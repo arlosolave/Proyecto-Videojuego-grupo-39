@@ -13,7 +13,10 @@ public final class GestorRecursos {
     private Texture texturaHeroe;
     private Texture texturaAguaBendita;
     private Texture texturaAtaque;
-
+    private Texture fondoPuente;
+    private Texture fondoEntrada;
+    private Texture fondoRecepcion;
+    private Texture fondoConde;
     private Sound sonidoHerido;
     private Sound sonidoRecoleccion;
     private Music musica;
@@ -36,6 +39,22 @@ public final class GestorRecursos {
             return;
         }
 
+        fondoPuente = new Texture(
+                Gdx.files.internal("fondo_puente.png")
+        );
+
+        fondoEntrada = new Texture(
+                Gdx.files.internal("fondo_entrada.png")
+        );
+
+        fondoRecepcion = new Texture(
+                Gdx.files.internal("fondo_recepcion.png")
+        );
+
+        fondoConde = new Texture(
+                Gdx.files.internal("fondo_conde.png")
+        );
+        
         texturaHeroe = new Texture(
                 Gdx.files.internal("bucket.png")
         );
@@ -63,6 +82,31 @@ public final class GestorRecursos {
         recursosCargados = true;
     }
 
+    public Texture getFondo(
+            TipoEscenario tipoEscenario) {
+
+        verificarCarga();
+
+        switch (tipoEscenario) {
+            case PUENTE:
+                return fondoPuente;
+
+            case ENTRADA:
+                return fondoEntrada;
+
+            case RECEPCION:
+                return fondoRecepcion;
+
+            case CONDE:
+                return fondoConde;
+
+            default:
+                throw new IllegalArgumentException(
+                        "Escenario desconocido."
+                );
+        }
+    }
+    
     private void verificarCarga() {
         if (!recursosCargados) {
             throw new IllegalStateException(
@@ -110,6 +154,11 @@ public final class GestorRecursos {
         texturaAguaBendita.dispose();
         texturaAtaque.dispose();
 
+        fondoPuente.dispose();
+        fondoEntrada.dispose();
+        fondoRecepcion.dispose();
+        fondoConde.dispose();
+        
         sonidoHerido.dispose();
         sonidoRecoleccion.dispose();
         musica.dispose();

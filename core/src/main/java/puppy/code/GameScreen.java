@@ -20,7 +20,7 @@ public class GameScreen implements Screen {
 	private GestorProyectiles gestorProyectiles;
 	private ShapeRenderer shapeRenderer;
 	private Partida partida;
-
+	private GestorRecursos recursos;
 	   
 	//boolean activo = true;
 
@@ -31,8 +31,7 @@ public class GameScreen implements Screen {
 	    this.batch = game.getBatch();
 	    this.font = game.getFont();
 
-	    GestorRecursos recursos =
-	            GestorRecursos.getInstancia();
+	    recursos = GestorRecursos.getInstancia();
 
 	    heroe = new Heroe(
 	            recursos.getTexturaHeroe(),
@@ -61,13 +60,17 @@ public class GameScreen implements Screen {
 
 	    shapeRenderer = new ShapeRenderer();
 
-	    // Crear el héroe y el gestor.
-	    heroe.crear();
+	 // Iniciar el gestor de proyectiles.
 	    gestorProyectiles.iniciar();
 
-	    // Iniciar la partida.
+	    // Crear e iniciar la partida.
 	    partida = new Partida();
 	    partida.iniciar(gestorProyectiles);
+
+	    // Crear al héroe sobre el suelo del primer nivel.
+	    heroe.crear(
+	            partida.getNivelActual().getAlturaSuelo()
+	    );
 	}
 
 	@Override
@@ -123,6 +126,24 @@ public class GameScreen implements Screen {
 	    // Actualizar matrices de la cámara.
 	    camera.update();
 
+	    batch.setProjectionMatrix(
+	            camera.combined
+	    );
+
+	    batch.begin();
+
+	    batch.draw(
+	            recursos.getFondo(
+	                    nivelActual.getTipoEscenario()
+	            ),
+	            0,
+	            0,
+	            800,
+	            480
+	    );
+
+	    batch.end();
+	    
 	    // Actualizar la lógica del juego.
 	    heroe.actualizarMovimiento(
 	             nivelActual.getPlataformas()

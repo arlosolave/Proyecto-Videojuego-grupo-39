@@ -11,6 +11,8 @@ public class NivelPuente extends Nivel {
                         .conDuracion(30f)
                         .conIntervaloAtaques(0.85f)
                         .conIntervaloAguaBendita(7f)
+                        .conEscenario(TipoEscenario.PUENTE)
+                        .conAlturaSuelo(80f)
                         .build()
         );
     }

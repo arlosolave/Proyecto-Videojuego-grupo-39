@@ -43,6 +43,10 @@ public class Partida {
 
         getNivelActual().iniciar(lluvia);
 
+        heroe.colocarEnSuelo(
+                getNivelActual().getAlturaSuelo()
+        );
+        
         return true;
     }
 

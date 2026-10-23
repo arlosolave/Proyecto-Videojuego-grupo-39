@@ -19,7 +19,7 @@ public class Heroe {
 	   private float velocidadVertical = 0;
 	   private static final float FUERZA_SALTO = 650f;
 	   private static final float GRAVEDAD = -1800f;
-	   private static final float ALTURA_SUELO = 20f;
+	   private float alturaSuelo;
 	   private boolean enSuelo = true;
 	   private boolean herido = false;
 	   private static final int DURACION_HERIDO=50;
@@ -47,10 +47,11 @@ public class Heroe {
 		    vidas++;
 		}
 	
-		public void crear() {
+		public void crear(float alturaSuelo) {
 		    area = new Rectangle();
 		    area.x = 800 / 2 - 64 / 2;
-		    area.y = ALTURA_SUELO;
+		    area.y = alturaSuelo;;
+		    this.alturaSuelo = alturaSuelo;
 		    area.width = 64;
 		    area.height = 64;
 
@@ -113,8 +114,8 @@ public class Heroe {
 		    enSuelo = false;
 
 		    // Colisión con el suelo
-		    if (area.y <= ALTURA_SUELO) {
-		        area.y = ALTURA_SUELO;
+		    if (area.y <= alturaSuelo) {
+		        area.y = alturaSuelo;
 		        velocidadVertical = 0;
 		        enSuelo = true;
 
@@ -160,7 +161,15 @@ public class Heroe {
 		        area.x = 800 - area.width;
 		    }
 		}
-	    
+	   public void colocarEnSuelo(
+		        float nuevaAlturaSuelo) {
+
+		    alturaSuelo = nuevaAlturaSuelo;
+
+		    area.y = alturaSuelo;
+		    velocidadVertical = 0;
+		    enSuelo = true;
+		}
 
 	
    public boolean estaHerido() {

@@ -11,6 +11,8 @@ public class NivelEntrada extends Nivel {
                         .conDuracion(30f)
                         .conIntervaloAtaques(0.75f)
                         .conIntervaloAguaBendita(6.5f)
+                        .conEscenario(TipoEscenario.ENTRADA)
+                        .conAlturaSuelo(80f)
                         .build()
         );
     }
@@ -20,25 +22,17 @@ public class NivelEntrada extends Nivel {
         agregarPlataforma(
                 new Plataforma(
                         120,
-                        100,
+                        160,
                         140,
                         18
                 )
         );
 
-        agregarPlataforma(
-                new Plataforma(
-                        350,
-                        190,
-                        130,
-                        18
-                )
-        );
 
         agregarPlataforma(
                 new Plataforma(
                         580,
-                        100,
+                        160,
                         140,
                         18
                 )

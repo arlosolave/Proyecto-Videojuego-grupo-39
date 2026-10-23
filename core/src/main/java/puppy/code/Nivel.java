@@ -94,4 +94,11 @@ public abstract class Nivel {
                 plataformas
         );
     }
+    public final TipoEscenario getTipoEscenario() {
+        return configuracion.getTipoEscenario();
+    }
+
+    public final float getAlturaSuelo() {
+        return configuracion.getAlturaSuelo();
+    }
 }

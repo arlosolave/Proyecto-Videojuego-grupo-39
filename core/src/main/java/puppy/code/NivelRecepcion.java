@@ -12,6 +12,8 @@ public class NivelRecepcion extends Nivel {
                         .conDuracion(35f)
                         .conIntervaloAtaques(0.65f)
                         .conIntervaloAguaBendita(6f)
+                        .conEscenario(TipoEscenario.RECEPCION)
+                        .conAlturaSuelo(80f)
                         .build()
         );
     }
@@ -21,7 +23,7 @@ public class NivelRecepcion extends Nivel {
         agregarPlataforma(
                 new Plataforma(
                         100,
-                        100,
+                        160,
                         140,
                         18
                 )
@@ -30,7 +32,7 @@ public class NivelRecepcion extends Nivel {
         agregarPlataforma(
                 new Plataforma(
                         335,
-                        180,
+                        190,
                         130,
                         18
                 )
@@ -39,7 +41,7 @@ public class NivelRecepcion extends Nivel {
         agregarPlataforma(
                 new Plataforma(
                         580,
-                        110,
+                        160,
                         140,
                         18
                 )

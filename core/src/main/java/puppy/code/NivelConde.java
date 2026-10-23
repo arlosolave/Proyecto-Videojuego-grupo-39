@@ -9,6 +9,8 @@ public class NivelConde extends Nivel {
                         .conDuracion(45f)
                         .conIntervaloAtaques(0.55f)
                         .conIntervaloAguaBendita(7f)
+                        .conEscenario(TipoEscenario.CONDE)
+                        .conAlturaSuelo(80f)
                         .build()
         );
     }
@@ -18,7 +20,7 @@ public class NivelConde extends Nivel {
         agregarPlataforma(
                 new Plataforma(
                         100,
-                        105,
+                        190,
                         130,
                         18
                 )
@@ -27,7 +29,7 @@ public class NivelConde extends Nivel {
         agregarPlataforma(
                 new Plataforma(
                         335,
-                        170,
+                        150,
                         130,
                         18
                 )
@@ -36,7 +38,7 @@ public class NivelConde extends Nivel {
         agregarPlataforma(
                 new Plataforma(
                         580,
-                        105,
+                        190,
                         130,
                         18
                 )
