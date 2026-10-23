@@ -6,8 +6,8 @@ public class NivelConde extends Nivel {
         super(
                 "Habitacion del conde",
                 new ConfiguracionNivel.Builder()
-                        .conDuracion(45f)
-                        .conIntervaloAtaques(0.48f)
+                        .conDuracion(10f)
+                        .conIntervaloAtaques(0.45f)
                         .conIntervaloAguaBendita(7f)
                         .conEscenario(TipoEscenario.CONDE)
                         .conAlturaSuelo(80f)

@@ -20,6 +20,10 @@ public final class GestorRecursos {
     private Texture fondoEntrada;
     private Texture fondoRecepcion;
     private Texture fondoConde;
+    private Texture texturaPlataforma;
+    private Texture transicionEntrada;
+    private Texture transicionRecepcion;
+    private Texture transicionConde;
     private Sound sonidoHerido;
     private Sound sonidoRecoleccion;
     private Music musica;
@@ -58,6 +62,24 @@ public final class GestorRecursos {
                 Gdx.files.internal("fondo_conde.png")
         );
         
+        transicionEntrada = new Texture(
+                Gdx.files.internal(
+                        "transicion_entrada.png"
+                )
+        );
+
+        transicionRecepcion = new Texture(
+                Gdx.files.internal(
+                        "transicion_recepcion.png"
+                )
+        );
+
+        transicionConde = new Texture(
+                Gdx.files.internal(
+                        "transicion_conde.png"
+                )
+        );
+        
         texturaHeroe = new Texture(
                 Gdx.files.internal("heroe.png")
         );
@@ -82,6 +104,12 @@ public final class GestorRecursos {
                 Gdx.files.internal("gota_conde.png")
         );
 
+        texturaPlataforma = new Texture(
+                Gdx.files.internal(
+                        "plataforma_piedra.png"
+                )
+        );
+        
         sonidoHerido = Gdx.audio.newSound(
                 Gdx.files.internal("hurt.ogg")
         );
@@ -122,6 +150,29 @@ public final class GestorRecursos {
         }
     }
     
+    public Texture getTransicion(
+            TipoEscenario destino) {
+
+        verificarCarga();
+
+        switch (destino) {
+            case ENTRADA:
+                return transicionEntrada;
+
+            case RECEPCION:
+                return transicionRecepcion;
+
+            case CONDE:
+                return transicionConde;
+
+            default:
+                throw new IllegalArgumentException(
+                        "No existe una transición para "
+                        + destino
+                );
+        }
+    }
+    
     private void verificarCarga() {
         if (!recursosCargados) {
             throw new IllegalStateException(
@@ -140,6 +191,11 @@ public final class GestorRecursos {
         return texturaAguaBendita;
     }
 
+    public Texture getTexturaPlataforma() {
+        verificarCarga();
+        return texturaPlataforma;
+    }
+    
     public Texture getTexturaAtaque(
             TipoEscenario tipoEscenario) {
 
@@ -191,7 +247,8 @@ public final class GestorRecursos {
         texturaFlecha.dispose();
         texturaLava.dispose();
         texturaGotaConde.dispose();
-
+        texturaPlataforma.dispose();
+        
         fondoPuente.dispose();
         fondoEntrada.dispose();
         fondoRecepcion.dispose();
@@ -201,6 +258,10 @@ public final class GestorRecursos {
         sonidoRecoleccion.dispose();
         musica.dispose();
 
+        transicionEntrada.dispose();
+        transicionRecepcion.dispose();
+        transicionConde.dispose();
+        
         recursosCargados = false;
     }
 }

@@ -8,8 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+
 
 public class GameScreen implements Screen {
 	final GameLluviaMenu game;
@@ -18,7 +17,6 @@ public class GameScreen implements Screen {
 	private BitmapFont font;
 	private Heroe heroe;
 	private GestorProyectiles gestorProyectiles;
-	private ShapeRenderer shapeRenderer;
 	private Partida partida;
 	private GestorRecursos recursos;
 	   
@@ -58,8 +56,6 @@ public class GameScreen implements Screen {
 	    // Cámara.
 	    camera = new OrthographicCamera();
 	    camera.setToOrtho(false, 800, 480);
-
-	    shapeRenderer = new ShapeRenderer();
 
 	 // Iniciar el gestor de proyectiles.
 	    gestorProyectiles.iniciar();
@@ -101,7 +97,7 @@ public class GameScreen implements Screen {
 	                    new TransicionNivelScreen(
 	                            game,
 	                            this,
-	                            nivelActual.getNombre()
+	                            nivelActual.getTipoEscenario()
 	                    )
 	            );
 	            return;
@@ -167,25 +163,21 @@ public class GameScreen implements Screen {
 	            return;
 	        }
 
-	    // Dibujar plataformas.
-	    shapeRenderer.setProjectionMatrix(
-	            camera.combined
-	    );
-
-	    shapeRenderer.begin(ShapeType.Filled);
-
-	    for (Plataforma plataforma
-	            : nivelActual.getPlataformas()) {
-
-	        plataforma.dibujar(shapeRenderer);
-	    }
-
-	    shapeRenderer.end();
+	    
 
 	    // Dibujar héroe, proyectiles e interfaz.
 	    batch.setProjectionMatrix(camera.combined);
 	    batch.begin();
 
+	    for (Plataforma plataforma
+	            : nivelActual.getPlataformas()) {
+
+	        plataforma.dibujar(
+	                batch,
+	                recursos.getTexturaPlataforma()
+	        );
+	    }
+	    
 	    heroe.dibujar(batch);
 	    gestorProyectiles.dibujar(batch);
 
@@ -263,7 +255,7 @@ public class GameScreen implements Screen {
 	@Override
 	public void dispose() {
 	    gestorProyectiles.pausar();
-	    shapeRenderer.dispose();
+	    
 	}
 
 }
