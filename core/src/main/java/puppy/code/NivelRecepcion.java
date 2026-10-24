@@ -9,8 +9,8 @@ public class NivelRecepcion extends Nivel {
         super(
                 "Recepcion del castillo",
                 new ConfiguracionNivel.Builder()
-                        .conDuracion(10f)
-                        .conIntervaloAtaques(0.55f)
+                        .conDuracion(35f)
+                        .conIntervaloAtaques(0.48f)
                         .conIntervaloAguaBendita(6f)
                         .conEscenario(TipoEscenario.RECEPCION)
                         .conAlturaSuelo(80f)

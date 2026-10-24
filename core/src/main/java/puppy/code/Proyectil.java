@@ -48,7 +48,7 @@ public class Proyectil {
 
         /*
          * Se centra la textura dentro del espacio
-         * máximo recibido por el constructor.
+         * maximo recibido por el constructor.
          */
         float xAjustada =
                 x + (ancho - anchoAjustado) / 2f;

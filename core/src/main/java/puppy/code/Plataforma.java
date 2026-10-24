@@ -53,6 +53,9 @@ public class Plataforma {
                 - altoVisual
                 + AJUSTE_VISUAL_Y;
 
+        // Plataforma original sobre el contorno.
+        batch.setColor(1f, 1f, 1f, 1f);
+
         batch.draw(
                 textura,
                 areaVisual.x,

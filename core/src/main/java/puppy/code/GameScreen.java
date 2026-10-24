@@ -53,7 +53,7 @@ public class GameScreen implements Screen {
 	                    new AtaqueVertical(300f)
 	            );
 
-	    // Cámara.
+	    // Camara.
 	    camera = new OrthographicCamera();
 	    camera.setToOrtho(false, 800, 480);
 
@@ -64,7 +64,7 @@ public class GameScreen implements Screen {
 	    partida = new Partida();
 	    partida.iniciar(gestorProyectiles);
 
-	    // Crear al héroe sobre el suelo del primer nivel.
+	    // Crear al heroe sobre el suelo del primer nivel.
 	    heroe.crear(
 	            partida.getNivelActual().getAlturaSuelo()
 	    );
@@ -120,7 +120,7 @@ public class GameScreen implements Screen {
 	        }
 	    }
 
-	    // Actualizar matrices de la cámara.
+	    // Actualizar matrices de la camara.
 	    camera.update();
 
 	    batch.setProjectionMatrix(
@@ -141,7 +141,7 @@ public class GameScreen implements Screen {
 
 	    batch.end();
 	    
-	    // Actualizar la lógica del juego.
+	    // Actualizar la logica del juego.
 	    heroe.actualizarMovimiento(
 	             nivelActual.getPlataformas()
 	    );
@@ -165,7 +165,7 @@ public class GameScreen implements Screen {
 
 	    
 
-	    // Dibujar héroe, proyectiles e interfaz.
+	    // Dibujar heroe, proyectiles e interfaz.
 	    batch.setProjectionMatrix(camera.combined);
 	    batch.begin();
 

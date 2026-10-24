@@ -24,6 +24,12 @@ public final class GestorRecursos {
     private Texture transicionEntrada;
     private Texture transicionRecepcion;
     private Texture transicionConde;
+    private Texture pantallaInicio;
+    private Texture pantallaDerrota;
+    private Texture pantallaVictoria;
+    private Texture tituloRainingBlood;
+    private Texture tituloGameOver;
+    private Texture tituloVictoria;
     private Sound sonidoHerido;
     private Sound sonidoRecoleccion;
     private Music musica;
@@ -80,6 +86,24 @@ public final class GestorRecursos {
                 )
         );
         
+        pantallaInicio = new Texture(
+                Gdx.files.internal(
+                        "pantalla_inicio.png"
+                )
+        );
+
+        pantallaDerrota = new Texture(
+                Gdx.files.internal(
+                        "pantalla_derrota.png"
+                )
+        );
+
+        pantallaVictoria = new Texture(
+                Gdx.files.internal(
+                        "pantalla_victoria.png"
+                )
+        );
+        
         texturaHeroe = new Texture(
                 Gdx.files.internal("heroe.png")
         );
@@ -107,6 +131,24 @@ public final class GestorRecursos {
         texturaPlataforma = new Texture(
                 Gdx.files.internal(
                         "plataforma_piedra.png"
+                )
+        );
+        
+        tituloRainingBlood = new Texture(
+                Gdx.files.internal(
+                        "titulo_raining_blood.png"
+                )
+        );
+
+        tituloGameOver = new Texture(
+                Gdx.files.internal(
+                        "titulo_game_over.png"
+                )
+        );
+
+        tituloVictoria = new Texture(
+                Gdx.files.internal(
+                        "titulo_victoria.png"
                 )
         );
         
@@ -167,7 +209,7 @@ public final class GestorRecursos {
 
             default:
                 throw new IllegalArgumentException(
-                        "No existe una transición para "
+                        "No existe una transicion para "
                         + destino
                 );
         }
@@ -235,6 +277,36 @@ public final class GestorRecursos {
         verificarCarga();
         return musica;
     }
+    
+    public Texture getPantallaInicio() {
+        verificarCarga();
+        return pantallaInicio;
+    }
+
+    public Texture getPantallaDerrota() {
+        verificarCarga();
+        return pantallaDerrota;
+    }
+
+    public Texture getPantallaVictoria() {
+        verificarCarga();
+        return pantallaVictoria;
+    }
+    
+    public Texture getTituloRainingBlood() {
+        verificarCarga();
+        return tituloRainingBlood;
+    }
+
+    public Texture getTituloGameOver() {
+        verificarCarga();
+        return tituloGameOver;
+    }
+
+    public Texture getTituloVictoria() {
+        verificarCarga();
+        return tituloVictoria;
+    }
 
     public void liberarRecursos() {
         if (!recursosCargados) {
@@ -261,6 +333,14 @@ public final class GestorRecursos {
         transicionEntrada.dispose();
         transicionRecepcion.dispose();
         transicionConde.dispose();
+        
+        pantallaInicio.dispose();
+        pantallaDerrota.dispose();
+        pantallaVictoria.dispose();
+        
+        tituloRainingBlood.dispose();
+        tituloGameOver.dispose();
+        tituloVictoria.dispose();
         
         recursosCargados = false;
     }

@@ -3,103 +3,195 @@ package puppy.code;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
 public class GameOverScreen implements Screen {
+
+    private static final Color COLOR_INSTRUCCION =
+            new Color(
+                    0.82f,
+                    0.86f,
+                    0.95f,
+                    1f
+            );
 
     private final GameLluviaMenu game;
     private final SpriteBatch batch;
     private final BitmapFont font;
+    private final GlyphLayout layout;
     private final OrthographicCamera camera;
-    private final GlyphLayout layout =
-            new GlyphLayout();
-    
+
+    private final Texture fondo;
+    private final Texture titulo;
+
     public GameOverScreen(
-            final GameLluviaMenu game) {
+            GameLluviaMenu game) {
 
         this.game = game;
         this.batch = game.getBatch();
         this.font = game.getFont();
 
+        layout = new GlyphLayout();
+
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 480);
-    }
-
-    private void dibujarTextoCentrado(
-            String texto,
-            float posicionY,
-            float escala) {
-
-        font.getData().setScale(escala);
-        layout.setText(font, texto);
-
-        float posicionX =
-                (camera.viewportWidth
-                - layout.width) / 2f;
-
-        font.draw(
-                batch,
-                layout,
-                posicionX,
-                posicionY
+        camera.setToOrtho(
+                false,
+                800,
+                480
         );
+
+        GestorRecursos recursos =
+                GestorRecursos.getInstancia();
+
+        fondo = recursos.getPantallaDerrota();
+        titulo = recursos.getTituloGameOver();
     }
-    
+
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0.12f, 0.01f, 0.01f, 1);
+        ScreenUtils.clear(0, 0, 0, 1);
 
         camera.update();
-        batch.setProjectionMatrix(camera.combined);
+
+        batch.setProjectionMatrix(
+                camera.combined
+        );
 
         batch.begin();
 
-        dibujarTextoCentrado(
-                "GAME OVER",
-                370,
-                2.3f
+        batch.setColor(Color.WHITE);
+
+        batch.draw(
+                fondo,
+                0,
+                0,
+                800,
+                480
+        );
+
+        batch.draw(
+                titulo,
+                150,
+                295,
+                500,
+                163
         );
 
         dibujarTextoCentrado(
-                "El heroe ha caido durante su viaje.",
-                265,
-                1.35f
-        );
-
-        dibujarTextoCentrado(
-                "Record de agua bendita: "
-                + game.getRecordAguaBendita(),
-                205,
-                1.3f
-        );
-
-        dibujarTextoCentrado(
-                "ENTER o clic para intentarlo nuevamente",
-                105,
+                "ENTER PARA REINTENTAR",
+                70,
                 1.2f
+        );
+
+        dibujarTextoCentrado(
+                "REGRESARAS AL PRIMER NIVEL WUAJA  xd",
+                35,
+                0.9f
         );
 
         batch.end();
 
-        font.getData().setScale(1f);
-
-        if (Gdx.input.isTouched()
+        boolean reiniciar =
+                Gdx.input.isKeyJustPressed(
+                        Input.Keys.ENTER
+                )
                 || Gdx.input.isKeyJustPressed(
-                        Input.Keys.ENTER)) {
+                        Input.Keys.SPACE
+                )
+                || Gdx.input.isTouched();
 
-            game.setScreen(new GameScreen(game));
+        if (reiniciar) {
+            game.setScreen(
+                    new GameScreen(game)
+            );
+
             dispose();
         }
     }
 
-    @Override public void show() {}
-    @Override public void resize(int width, int height) {}
-    @Override public void pause() {}
-    @Override public void resume() {}
-    @Override public void hide() {}
-    @Override public void dispose() {}
+    private void dibujarTextoCentrado(
+            String texto,
+            float y,
+            float escala) {
+
+        font.getData().setScale(escala);
+
+        layout.setText(
+                font,
+                texto
+        );
+
+        float x =
+                (camera.viewportWidth
+                - layout.width) / 2f;
+
+        // Sombra y contorno.
+        font.setColor(
+                0f,
+                0f,
+                0f,
+                0.95f
+        );
+
+        font.draw(
+                batch,
+                texto,
+                x + 3,
+                y - 3
+        );
+
+        font.draw(batch, texto, x - 2, y);
+        font.draw(batch, texto, x + 2, y);
+        font.draw(batch, texto, x, y - 2);
+        font.draw(batch, texto, x, y + 2);
+
+        // Texto principal.
+        font.setColor(COLOR_INSTRUCCION);
+
+        font.draw(
+                batch,
+                texto,
+                x,
+                y
+        );
+
+        font.setColor(Color.WHITE);
+        font.getData().setScale(1f);
+    }
+
+    @Override
+    public void show() {
+    }
+
+    @Override
+    public void resize(
+            int width,
+            int height) {
+    }
+
+    @Override
+    public void pause() {
+    }
+
+    @Override
+    public void resume() {
+    }
+
+    @Override
+    public void hide() {
+    }
+
+    @Override
+    public void dispose() {
+        /*
+         * Las texturas, batch y fuente pertenecen
+         * a sus respectivos administradores.
+         */
+    }
 }

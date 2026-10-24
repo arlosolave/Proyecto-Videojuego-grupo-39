@@ -140,7 +140,7 @@ public class Heroe {
 		    area.y += velocidadVertical * delta;
 		    enSuelo = false;
 
-		    // Colisión con el suelo
+		    // Colision con el suelo
 		    if (area.y <= alturaSuelo) {
 		        area.y = alturaSuelo;
 		        velocidadVertical = 0;
@@ -148,7 +148,7 @@ public class Heroe {
 
 		    } else if (velocidadVertical <= 0) {
 
-		        // Colisión al caer sobre plataformas
+		        // Colision al caer sobre plataformas
 		        for (Plataforma plataforma : plataformas) {
 		            Rectangle areaPlataforma =
 		                    plataforma.getArea();

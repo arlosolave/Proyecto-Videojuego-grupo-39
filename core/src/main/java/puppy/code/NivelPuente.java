@@ -8,8 +8,8 @@ public class NivelPuente extends Nivel {
         super(
                 "Puente de piedra",
                 new ConfiguracionNivel.Builder()
-                        .conDuracion(10f)
-                        .conIntervaloAtaques(0.60f)
+                        .conDuracion(30f)
+                        .conIntervaloAtaques(0.55f)
                         .conIntervaloAguaBendita(7f)
                         .conEscenario(TipoEscenario.PUENTE)
                         .conAlturaSuelo(80f)
