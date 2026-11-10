@@ -1,4 +1,4 @@
-package puppy.code;
+package puppy.code.modelo;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -42,8 +42,12 @@ public class Heroe {
 		public int getAguaBenditaRecolectada() {
 			return aguaBenditaRecolectada;
 		}
-		public Rectangle getArea() {
-			return area;
+		public boolean colisionaCon(
+		        Rectangle otraArea) {
+
+		    return area != null
+		            && otraArea != null
+		            && area.overlaps(otraArea);
 		}
 		public void recolectarAguaBendita(int pp) {
 			aguaBenditaRecolectada+=pp;

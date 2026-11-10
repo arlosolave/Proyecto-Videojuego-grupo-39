@@ -1,9 +1,13 @@
-package puppy.code;
+package puppy.code.gestores;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import java.util.EnumMap;
+import java.util.Map;
+
+import puppy.code.niveles.TipoEscenario;
 
 public final class GestorRecursos {
 
@@ -12,18 +16,7 @@ public final class GestorRecursos {
 
     private Texture texturaHeroe;
     private Texture texturaAguaBendita;
-    private Texture texturaSangre;
-    private Texture texturaFlecha;
-    private Texture texturaLava;
-    private Texture texturaGotaConde;
-    private Texture fondoPuente;
-    private Texture fondoEntrada;
-    private Texture fondoRecepcion;
-    private Texture fondoConde;
     private Texture texturaPlataforma;
-    private Texture transicionEntrada;
-    private Texture transicionRecepcion;
-    private Texture transicionConde;
     private Texture pantallaInicio;
     private Texture pantallaDerrota;
     private Texture pantallaVictoria;
@@ -33,13 +26,17 @@ public final class GestorRecursos {
     private Sound sonidoHerido;
     private Sound sonidoRecoleccion;
     private Music musica;
+    private final Map<TipoEscenario, Texture> fondos =
+            new EnumMap<>(TipoEscenario.class);
 
+    private final Map<TipoEscenario, Texture> texturasAtaque =
+            new EnumMap<>(TipoEscenario.class);
+
+    private final Map<TipoEscenario, Texture> transiciones =
+            new EnumMap<>(TipoEscenario.class);
+    
     private boolean recursosCargados;
 
-    /*
-     * Constructor privado:
-     * impide crear instancias desde otras clases.
-     */
     private GestorRecursos() {
     }
 
@@ -51,40 +48,6 @@ public final class GestorRecursos {
         if (recursosCargados) {
             return;
         }
-
-        fondoPuente = new Texture(
-                Gdx.files.internal("fondo_puente.png")
-        );
-
-        fondoEntrada = new Texture(
-                Gdx.files.internal("fondo_entrada.png")
-        );
-
-        fondoRecepcion = new Texture(
-                Gdx.files.internal("fondo_recepcion.png")
-        );
-
-        fondoConde = new Texture(
-                Gdx.files.internal("fondo_conde.png")
-        );
-        
-        transicionEntrada = new Texture(
-                Gdx.files.internal(
-                        "transicion_entrada.png"
-                )
-        );
-
-        transicionRecepcion = new Texture(
-                Gdx.files.internal(
-                        "transicion_recepcion.png"
-                )
-        );
-
-        transicionConde = new Texture(
-                Gdx.files.internal(
-                        "transicion_conde.png"
-                )
-        );
         
         pantallaInicio = new Texture(
                 Gdx.files.internal(
@@ -104,28 +67,45 @@ public final class GestorRecursos {
                 )
         );
         
+        for (TipoEscenario tipo
+                : TipoEscenario.values()) {
+
+            fondos.put(
+                    tipo,
+                    new Texture(
+                            Gdx.files.internal(
+                                    tipo.getRutaFondo()
+                            )
+                    )
+            );
+
+            texturasAtaque.put(
+                    tipo,
+                    new Texture(
+                            Gdx.files.internal(
+                                    tipo.getRutaAtaque()
+                            )
+                    )
+            );
+
+            if (tipo.tieneTransicion()) {
+                transiciones.put(
+                        tipo,
+                        new Texture(
+                                Gdx.files.internal(
+                                        tipo.getRutaTransicion()
+                                )
+                        )
+                );
+            }
+        }
+        
         texturaHeroe = new Texture(
                 Gdx.files.internal("heroe.png")
         );
 
         texturaAguaBendita = new Texture(
                 Gdx.files.internal("agua_bendita.png")
-        );
-
-        texturaSangre = new Texture(
-                Gdx.files.internal("gota_sangre.png")
-        );
-
-        texturaFlecha = new Texture(
-                Gdx.files.internal("flecha.png")
-        );
-
-        texturaLava = new Texture(
-                Gdx.files.internal("lava.png")
-        );
-
-        texturaGotaConde = new Texture(
-                Gdx.files.internal("gota_conde.png")
         );
 
         texturaPlataforma = new Texture(
@@ -167,29 +147,38 @@ public final class GestorRecursos {
         recursosCargados = true;
     }
 
+    private Texture obtenerTextura(
+            Map<TipoEscenario, Texture> texturas,
+            TipoEscenario tipo,
+            String descripcion) {
+
+        if (tipo == null) {
+            throw new IllegalArgumentException(
+                    "El tipo de escenario no puede ser nulo."
+            );
+        }
+
+        Texture textura = texturas.get(tipo);
+
+        if (textura == null) {
+            throw new IllegalArgumentException(
+                    descripcion + tipo
+            );
+        }
+
+        return textura;
+    }
+    
     public Texture getFondo(
             TipoEscenario tipoEscenario) {
 
         verificarCarga();
 
-        switch (tipoEscenario) {
-            case PUENTE:
-                return fondoPuente;
-
-            case ENTRADA:
-                return fondoEntrada;
-
-            case RECEPCION:
-                return fondoRecepcion;
-
-            case CONDE:
-                return fondoConde;
-
-            default:
-                throw new IllegalArgumentException(
-                        "Escenario desconocido."
-                );
-        }
+        return obtenerTextura(
+                fondos,
+                tipoEscenario,
+                "No existe un fondo para "
+        );
     }
     
     public Texture getTransicion(
@@ -197,22 +186,11 @@ public final class GestorRecursos {
 
         verificarCarga();
 
-        switch (destino) {
-            case ENTRADA:
-                return transicionEntrada;
-
-            case RECEPCION:
-                return transicionRecepcion;
-
-            case CONDE:
-                return transicionConde;
-
-            default:
-                throw new IllegalArgumentException(
-                        "No existe una transicion para "
-                        + destino
-                );
-        }
+        return obtenerTextura(
+                transiciones,
+                destino,
+                "No existe una transición para "
+        );
     }
     
     private void verificarCarga() {
@@ -243,24 +221,11 @@ public final class GestorRecursos {
 
         verificarCarga();
 
-        switch (tipoEscenario) {
-            case PUENTE:
-                return texturaSangre;
-
-            case ENTRADA:
-                return texturaFlecha;
-
-            case RECEPCION:
-                return texturaLava;
-
-            case CONDE:
-                return texturaGotaConde;
-
-            default:
-                throw new IllegalArgumentException(
-                        "Escenario desconocido."
-                );
-        }
+        return obtenerTextura(
+                texturasAtaque,
+                tipoEscenario,
+                "No existe un ataque para "
+        );
     }
 
     public Sound getSonidoHerido() {
@@ -308,31 +273,32 @@ public final class GestorRecursos {
         return tituloVictoria;
     }
 
+    private void liberarTexturas(
+            Map<TipoEscenario, Texture> texturas) {
+
+        for (Texture textura : texturas.values()) {
+            textura.dispose();
+        }
+
+        texturas.clear();
+    }
+    
     public void liberarRecursos() {
         if (!recursosCargados) {
             return;
         }
 
+        liberarTexturas(fondos);
+        liberarTexturas(texturasAtaque);
+        liberarTexturas(transiciones);
+        
         texturaHeroe.dispose();
         texturaAguaBendita.dispose();
-        texturaSangre.dispose();
-        texturaFlecha.dispose();
-        texturaLava.dispose();
-        texturaGotaConde.dispose();
         texturaPlataforma.dispose();
-        
-        fondoPuente.dispose();
-        fondoEntrada.dispose();
-        fondoRecepcion.dispose();
-        fondoConde.dispose();
         
         sonidoHerido.dispose();
         sonidoRecoleccion.dispose();
         musica.dispose();
-
-        transicionEntrada.dispose();
-        transicionRecepcion.dispose();
-        transicionConde.dispose();
         
         pantallaInicio.dispose();
         pantallaDerrota.dispose();

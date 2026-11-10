@@ -1,4 +1,4 @@
-package puppy.code;
+package puppy.code.pantallas;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -11,13 +11,16 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-public class GameOverScreen implements Screen {
+import puppy.code.GameLluviaMenu;
+import puppy.code.gestores.GestorRecursos;
+
+public class MainMenuScreen implements Screen {
 
     private static final Color COLOR_INSTRUCCION =
             new Color(
-                    0.82f,
+                    0.78f,
                     0.86f,
-                    0.95f,
+                    1f,
                     1f
             );
 
@@ -26,11 +29,10 @@ public class GameOverScreen implements Screen {
     private final BitmapFont font;
     private final GlyphLayout layout;
     private final OrthographicCamera camera;
-
     private final Texture fondo;
     private final Texture titulo;
-
-    public GameOverScreen(
+    
+    public MainMenuScreen(
             GameLluviaMenu game) {
 
         this.game = game;
@@ -46,11 +48,13 @@ public class GameOverScreen implements Screen {
                 480
         );
 
-        GestorRecursos recursos =
-                GestorRecursos.getInstancia();
-
-        fondo = recursos.getPantallaDerrota();
-        titulo = recursos.getTituloGameOver();
+        fondo = GestorRecursos
+                .getInstancia()
+                .getPantallaInicio();
+        
+        titulo = GestorRecursos
+                .getInstancia()
+                .getTituloRainingBlood();
     }
 
     @Override
@@ -65,8 +69,6 @@ public class GameOverScreen implements Screen {
 
         batch.begin();
 
-        batch.setColor(Color.WHITE);
-
         batch.draw(
                 fondo,
                 0,
@@ -75,29 +77,33 @@ public class GameOverScreen implements Screen {
                 480
         );
 
+        batch.setColor(Color.WHITE);
+
         batch.draw(
                 titulo,
-                150,
-                295,
-                500,
-                163
+                130,
+                250,
+                540,
+                167
         );
 
         dibujarTextoCentrado(
-                "ENTER PARA REINTENTAR",
+                "ENTER PARA COMENZAR",
                 70,
-                1.2f
+                1.2f,
+                COLOR_INSTRUCCION
         );
 
         dibujarTextoCentrado(
-                "REGRESARAS AL PRIMER NIVEL WUAJA  xd",
+                "FLECHAS: MOVER   |   ESPACIO: SALTAR",
                 35,
-                0.9f
+                0.9f,
+                COLOR_INSTRUCCION
         );
 
         batch.end();
 
-        boolean reiniciar =
+        boolean comenzar =
                 Gdx.input.isKeyJustPressed(
                         Input.Keys.ENTER
                 )
@@ -106,7 +112,7 @@ public class GameOverScreen implements Screen {
                 )
                 || Gdx.input.isTouched();
 
-        if (reiniciar) {
+        if (comenzar) {
             game.setScreen(
                     new GameScreen(game)
             );
@@ -118,7 +124,8 @@ public class GameOverScreen implements Screen {
     private void dibujarTextoCentrado(
             String texto,
             float y,
-            float escala) {
+            float escala,
+            Color colorPrincipal) {
 
         font.getData().setScale(escala);
 
@@ -131,12 +138,12 @@ public class GameOverScreen implements Screen {
                 (camera.viewportWidth
                 - layout.width) / 2f;
 
-        // Sombra y contorno.
+        // Sombra.
         font.setColor(
                 0f,
                 0f,
                 0f,
-                0.95f
+                0.9f
         );
 
         font.draw(
@@ -146,13 +153,14 @@ public class GameOverScreen implements Screen {
                 y - 3
         );
 
+        // Contorno.
         font.draw(batch, texto, x - 2, y);
         font.draw(batch, texto, x + 2, y);
         font.draw(batch, texto, x, y - 2);
         font.draw(batch, texto, x, y + 2);
 
         // Texto principal.
-        font.setColor(COLOR_INSTRUCCION);
+        font.setColor(colorPrincipal);
 
         font.draw(
                 batch,
@@ -190,8 +198,8 @@ public class GameOverScreen implements Screen {
     @Override
     public void dispose() {
         /*
-         * Las texturas, batch y fuente pertenecen
-         * a sus respectivos administradores.
+         * El fondo, batch y font pertenecen
+         * a otros administradores.
          */
     }
 }

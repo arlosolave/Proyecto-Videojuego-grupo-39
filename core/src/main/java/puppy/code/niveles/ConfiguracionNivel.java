@@ -1,4 +1,4 @@
-package puppy.code;
+package puppy.code.niveles;
 
 public final class ConfiguracionNivel {
 

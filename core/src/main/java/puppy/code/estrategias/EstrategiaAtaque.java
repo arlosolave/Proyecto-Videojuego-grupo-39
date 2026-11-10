@@ -1,6 +1,8 @@
-package puppy.code;
+package puppy.code.estrategias;
 
 import com.badlogic.gdx.graphics.Texture;
+
+import puppy.code.modelo.Proyectil;
 
 public interface EstrategiaAtaque {
 

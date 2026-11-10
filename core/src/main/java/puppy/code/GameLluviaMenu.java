@@ -4,6 +4,9 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import puppy.code.gestores.GestorRecursos;
+import puppy.code.pantallas.MainMenuScreen;
+
 	public class GameLluviaMenu extends Game {
 
 		private SpriteBatch batch;
@@ -50,8 +53,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 			return recordAguaBendita;
 		}
 
-		public void setRecordAguaBendita(int higherScore) {
-			this.recordAguaBendita = higherScore;
+		public void actualizarRecordAguaBendita(
+		        int nuevoPuntaje) {
+
+		    if (nuevoPuntaje < 0) {
+		        throw new IllegalArgumentException(
+		                "El puntaje no puede ser negativo."
+		        );
+		    }
+
+		    if (nuevoPuntaje > recordAguaBendita) {
+		        recordAguaBendita = nuevoPuntaje;
+		    }
 		}
 		
 

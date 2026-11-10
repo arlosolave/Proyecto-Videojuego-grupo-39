@@ -1,4 +1,4 @@
-package puppy.code;
+package puppy.code.pantallas;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -11,7 +11,18 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-public class VictoriaScreen implements Screen {
+import puppy.code.GameLluviaMenu;
+import puppy.code.gestores.GestorRecursos;
+
+public class GameOverScreen implements Screen {
+
+    private static final Color COLOR_INSTRUCCION =
+            new Color(
+                    0.82f,
+                    0.86f,
+                    0.95f,
+                    1f
+            );
 
     private final GameLluviaMenu game;
     private final SpriteBatch batch;
@@ -22,8 +33,8 @@ public class VictoriaScreen implements Screen {
     private final Texture fondo;
     private final Texture titulo;
 
-    public VictoriaScreen(
-            final GameLluviaMenu game) {
+    public GameOverScreen(
+            GameLluviaMenu game) {
 
         this.game = game;
         this.batch = game.getBatch();
@@ -32,13 +43,17 @@ public class VictoriaScreen implements Screen {
         layout = new GlyphLayout();
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 480);
+        camera.setToOrtho(
+                false,
+                800,
+                480
+        );
 
         GestorRecursos recursos =
                 GestorRecursos.getInstancia();
 
-        fondo = recursos.getPantallaVictoria();
-        titulo = recursos.getTituloVictoria();
+        fondo = recursos.getPantallaDerrota();
+        titulo = recursos.getTituloGameOver();
     }
 
     @Override
@@ -46,7 +61,10 @@ public class VictoriaScreen implements Screen {
         ScreenUtils.clear(0, 0, 0, 1);
 
         camera.update();
-        batch.setProjectionMatrix(camera.combined);
+
+        batch.setProjectionMatrix(
+                camera.combined
+        );
 
         batch.begin();
 
@@ -63,35 +81,35 @@ public class VictoriaScreen implements Screen {
         batch.draw(
                 titulo,
                 150,
-                300,
+                295,
                 500,
-                157
+                163
         );
 
         dibujarTextoCentrado(
-                "AGUA  BENDITA  REUNIDA:  "
-                + game.getRecordAguaBendita(),
-                82,
-                1.15f
+                "ENTER PARA REINTENTAR",
+                70,
+                1.2f
         );
 
         dibujarTextoCentrado(
-                "ENTER PARA JUGAR NUEVAMENTE",
-                43,
-                1f
+                "REGRESARAS AL PRIMER NIVEL WUAJA  xd",
+                35,
+                0.9f
         );
 
         batch.end();
 
-        font.getData().setScale(1f);
-        font.setColor(Color.WHITE);
-
-        if (Gdx.input.isKeyJustPressed(
-                Input.Keys.ENTER)
+        boolean reiniciar =
+                Gdx.input.isKeyJustPressed(
+                        Input.Keys.ENTER
+                )
                 || Gdx.input.isKeyJustPressed(
-                        Input.Keys.SPACE)
-                || Gdx.input.justTouched()) {
+                        Input.Keys.SPACE
+                )
+                || Gdx.input.isTouched();
 
+        if (reiniciar) {
             game.setScreen(
                     new GameScreen(game)
             );
@@ -102,55 +120,52 @@ public class VictoriaScreen implements Screen {
 
     private void dibujarTextoCentrado(
             String texto,
-            float posicionY,
+            float y,
             float escala) {
 
         font.getData().setScale(escala);
-        layout.setText(font, texto);
 
-        float posicionX =
-                (800 - layout.width) / 2f;
+        layout.setText(
+                font,
+                texto
+        );
 
-        // Contorno oscuro.
-        font.setColor(Color.BLACK);
+        float x =
+                (camera.viewportWidth
+                - layout.width) / 2f;
 
-        font.draw(
-                batch,
-                texto,
-                posicionX - 2,
-                posicionY
+        // Sombra y contorno.
+        font.setColor(
+                0f,
+                0f,
+                0f,
+                0.95f
         );
 
         font.draw(
                 batch,
                 texto,
-                posicionX + 2,
-                posicionY
+                x + 3,
+                y - 3
         );
 
-        font.draw(
-                batch,
-                texto,
-                posicionX,
-                posicionY - 2
-        );
-
-        font.draw(
-                batch,
-                texto,
-                posicionX,
-                posicionY + 2
-        );
+        font.draw(batch, texto, x - 2, y);
+        font.draw(batch, texto, x + 2, y);
+        font.draw(batch, texto, x, y - 2);
+        font.draw(batch, texto, x, y + 2);
 
         // Texto principal.
-        font.setColor(Color.WHITE);
+        font.setColor(COLOR_INSTRUCCION);
 
         font.draw(
                 batch,
                 texto,
-                posicionX,
-                posicionY
+                x,
+                y
         );
+
+        font.setColor(Color.WHITE);
+        font.getData().setScale(1f);
     }
 
     @Override
@@ -178,8 +193,8 @@ public class VictoriaScreen implements Screen {
     @Override
     public void dispose() {
         /*
-         * Las texturas, la fuente y el SpriteBatch
-         * pertenecen a los gestores compartidos.
+         * Las texturas, batch y fuente pertenecen
+         * a sus respectivos administradores.
          */
     }
 }

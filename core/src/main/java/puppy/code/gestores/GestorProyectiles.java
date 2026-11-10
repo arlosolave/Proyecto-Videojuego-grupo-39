@@ -1,4 +1,4 @@
-package puppy.code;
+package puppy.code.gestores;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
@@ -8,6 +8,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+
+import puppy.code.estrategias.EstrategiaAtaque;
+import puppy.code.modelo.Heroe;
+import puppy.code.modelo.Proyectil;
 
 public class GestorProyectiles {
 
@@ -192,8 +196,7 @@ public class GestorProyectiles {
                 continue;
             }
 
-            if (proyectil.colisionaCon(
-                    heroe.getArea())) {
+            if (proyectil.colisionaCon(heroe)) {
 
                 if (proyectil.esDanino()) {
                     heroe.danar();

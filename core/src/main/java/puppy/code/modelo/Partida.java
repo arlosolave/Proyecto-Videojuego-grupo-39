@@ -1,7 +1,14 @@
-package puppy.code;
+package puppy.code.modelo;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import puppy.code.gestores.GestorProyectiles;
+import puppy.code.niveles.Nivel;
+import puppy.code.niveles.NivelPuente;
+import puppy.code.niveles.NivelEntrada;
+import puppy.code.niveles.NivelRecepcion;
+import puppy.code.niveles.NivelConde;
 
 public class Partida {
 

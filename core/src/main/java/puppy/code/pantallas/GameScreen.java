@@ -1,4 +1,4 @@
-package puppy.code;
+package puppy.code.pantallas;
 
 
 import com.badlogic.gdx.Screen;
@@ -9,16 +9,26 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import puppy.code.GameLluviaMenu;
+import puppy.code.estrategias.AtaqueVertical;
+import puppy.code.gestores.GestorProyectiles;
+import puppy.code.gestores.GestorRecursos;
+import puppy.code.modelo.Heroe;
+import puppy.code.modelo.Partida;
+import puppy.code.modelo.Plataforma;
+import puppy.code.niveles.Nivel;
+import puppy.code.niveles.TipoEscenario;
+
 
 public class GameScreen implements Screen {
-	final GameLluviaMenu game;
-    private OrthographicCamera camera;
-	private SpriteBatch batch;	   
-	private BitmapFont font;
-	private Heroe heroe;
-	private GestorProyectiles gestorProyectiles;
-	private Partida partida;
-	private GestorRecursos recursos;
+	private final GameLluviaMenu game;
+    private final OrthographicCamera camera;
+	private final SpriteBatch batch;	   
+	private final BitmapFont font;
+	private final Heroe heroe;
+	private final GestorProyectiles gestorProyectiles;
+	private final Partida partida;
+	private final GestorRecursos recursos;
 	   
 	//boolean activo = true;
 
@@ -106,9 +116,9 @@ public class GameScreen implements Screen {
 	            if (game.getRecordAguaBendita()
 	                    < heroe.getAguaBenditaRecolectada()) {
 
-	                game.setRecordAguaBendita(
-	                        heroe.getAguaBenditaRecolectada()
-	                );
+	            	game.actualizarRecordAguaBendita(
+	            	        heroe.getAguaBenditaRecolectada()
+	            	);
 	            }
 
 	            game.setScreen(
@@ -150,9 +160,9 @@ public class GameScreen implements Screen {
 	            if (game.getRecordAguaBendita()
 	                    < heroe.getAguaBenditaRecolectada()) {
 
-	                game.setRecordAguaBendita(
-	                        heroe.getAguaBenditaRecolectada()
-	                );
+	            	game.actualizarRecordAguaBendita(
+	            	        heroe.getAguaBenditaRecolectada()
+	            	);
 	            }
 
 	            game.setScreen(

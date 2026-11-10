@@ -1,7 +1,9 @@
-package puppy.code;
+package puppy.code.estrategias;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
+
+import puppy.code.modelo.Proyectil;
 
 public class AtaqueDiagonal
         implements EstrategiaAtaque {

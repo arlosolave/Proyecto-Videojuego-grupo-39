@@ -1,8 +1,12 @@
-package puppy.code;
+package puppy.code.niveles;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import puppy.code.modelo.Plataforma;
+import puppy.code.gestores.GestorProyectiles;
+import puppy.code.estrategias.EstrategiaAtaque;
+import puppy.code.gestores.GestorRecursos;
 
 public abstract class Nivel {
 

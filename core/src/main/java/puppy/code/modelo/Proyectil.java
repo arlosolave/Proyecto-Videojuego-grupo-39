@@ -1,4 +1,4 @@
-package puppy.code;
+package puppy.code.modelo;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -103,9 +103,10 @@ public class Proyectil {
     }
 
     public boolean colisionaCon(
-            Rectangle otraArea) {
+            Heroe heroe) {
 
-        return hitbox.overlaps(otraArea);
+        return heroe != null
+                && heroe.colisionaCon(hitbox);
     }
 
     public boolean estaFueraDePantalla(

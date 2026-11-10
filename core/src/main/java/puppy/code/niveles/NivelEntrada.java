@@ -1,4 +1,8 @@
-package puppy.code;
+package puppy.code.niveles;
+
+import puppy.code.estrategias.AtaqueHorizontal;
+import puppy.code.estrategias.EstrategiaAtaque;
+import puppy.code.modelo.Plataforma;
 
 public class NivelEntrada extends Nivel {
 
