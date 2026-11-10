@@ -13,14 +13,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 public class MainMenuScreen implements Screen {
 
-    private static final Color COLOR_TITULO =
-            new Color(
-                    0.92f,
-                    0.78f,
-                    0.38f,
-                    1f
-            );
-
     private static final Color COLOR_INSTRUCCION =
             new Color(
                     0.78f,
